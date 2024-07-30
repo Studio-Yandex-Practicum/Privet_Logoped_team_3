@@ -1,0 +1,7 @@
+venv
+.git
+.idea
+.env
+read.me
+docker-compose.production.yml
+
