@@ -26,7 +26,7 @@ git clone
 
 ```
 cd vk_bot
-``
+```
 
 заполнить .env
 ```
