@@ -14,7 +14,7 @@ bl = BotLabeler()
 
 @bl.private_message(CommandRule(MAIN_MENU_WORD, COMMAND_PREFIXES, 0))
 async def main_menu(message: Message):
-    log.info('Received message: %s', message.text)
+    log.info('Received command: %s in %s', MAIN_MENU_WORD, message.text)
     print(message)
     await message.answer(
         GREETING_MESSAGE,
