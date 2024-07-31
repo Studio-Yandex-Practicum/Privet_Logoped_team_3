@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  vk_bot:
+    build: .
+    env_file: .env
