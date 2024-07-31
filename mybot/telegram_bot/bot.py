@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.filters import Command
 
-import keyboard
+import keyboards
 
 bot = Bot(
     "7436763245:AAE8FHxQVuuPcpNSEtuQcQ-D1EiPY6OdGAg",
@@ -19,8 +19,26 @@ async def start(message: Message):
             'Добро пожаловать в бота "Привет, Логопед!".\n'
             'Давайте познакомимся, выберите свою роль:'
         ),
-        reply_markup=keyboard.main_kb
+        reply_markup=keyboards.role_kb
     )
+
+
+@dp.message(Command("menu"))
+async def menu(message: Message):
+    await message.answer(
+        (
+            'Вот с чем я могу Вам помочь:'
+        ),
+        reply_markup=keyboards.main_kb
+    )
+
+
+@dp.message()
+async def role(message: Message):
+    msg = message.text.lower()
+
+    if msg in ["родитель", "логопед"]:
+        await menu(message)
 
 
 async def main():

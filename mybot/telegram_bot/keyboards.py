@@ -28,3 +28,16 @@ main_kb = ReplyKeyboardMarkup(
     input_field_placeholder="Выберите действие из меню",  # выводит сообщение в поле ввода во время работы с меню
 
 )
+
+
+role_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Родитель"),
+            KeyboardButton(text="Логопед")
+        ]
+    ],
+    resize_keyboard=True,  # Подстраивает размер кнопок под телефон
+    one_time_keyboard=True,  # Скрывает клавиатуру после нажатия кнопки
+    input_field_placeholder="Выберите роль",  # выводит сообщение в поле ввода во время работы с меню
+)

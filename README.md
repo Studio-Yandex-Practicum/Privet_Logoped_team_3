@@ -30,6 +30,8 @@
 - Vkbottle;
 - Python;
 - SQLite/MySql.
+- AioSqlite
+- Alembics
 
 ## Команда
 Владислав Слепов - Тимлид
