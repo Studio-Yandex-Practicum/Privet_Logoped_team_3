@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from api.serializers import ContentSerializer, UserProfileSerializer, \
-    UserProfileUpdateSerializer
+from api.serializers import (ContentSerializer, UserProfileSerializer,
+    UserProfileUpdateSerializer)
 from bot.models import Content, UserProfile
 
 
