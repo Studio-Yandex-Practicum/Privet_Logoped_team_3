@@ -5,9 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from api.serializers import ContentSerializer, UserProfileSerializer, \
+from api.serializers import ContentSerializer, NotificationSerializer, \
+    UserProfileSerializer, \
     UserProfileUpdateSerializer
-from bot.models import Content, UserProfile
+from bot.models import Content, Notification, UserProfile
 
 
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
@@ -58,3 +59,18 @@ class ContentViewSet(viewsets.ModelViewSet):
 
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
+
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    """(GET, LIST): Работа с профилем."""
+
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+    @action(methods=['post'], detail=False, url_path='uid')
+    def uid_create(self, request):
+        """Создание напоминания по UID."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=HTTPStatus.CREATED)

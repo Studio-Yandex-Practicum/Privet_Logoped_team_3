@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from bot.models import Content, UserProfile
+from bot.models import Content, Notification, UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -34,3 +34,10 @@ class ContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Content
         exclude = ('id', )
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Notification
+        fields = '__all__'

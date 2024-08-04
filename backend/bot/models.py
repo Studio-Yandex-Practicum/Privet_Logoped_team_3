@@ -4,16 +4,16 @@ from django.db import models
 
 from users.models import User
 
+PLATFORMS = [
+    ('vk', 'Vk'),
+    ('tg', 'Telegram'),
+]
+
 
 class UserProfile(models.Model):
     USER_ROLES = [
         ('parent', 'Родитель'),
         ('speech_therapist', 'Логопед'),
-    ]
-
-    PLATFORMS = [
-        ('vk', 'Vk'),
-        ('tg', 'Telegram'),
     ]
 
     user_id = models.CharField('user_id',max_length=50, unique=True)
@@ -32,7 +32,7 @@ class UserProfile(models.Model):
 
 class Notification(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    platform = models.CharField('Платформа',max_length=50)
+    platform  = models.CharField('platform ',max_length=50, choices=PLATFORMS)
     days_of_week = models.CharField('Дни недели',max_length=50)
     time = models.TimeField(auto_now=False, auto_now_add=False)
 
