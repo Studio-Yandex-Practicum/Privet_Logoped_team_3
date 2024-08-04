@@ -17,14 +17,18 @@ class UserProfile(models.Model):
     ]
 
     user_id = models.CharField('user_id',max_length=50, unique=True)
-    username  = models.CharField('username ',max_length=50)
-    platform  = models.CharField('platform ',max_length=50, choices=PLATFORMS)
-    role  = models.CharField('role ',max_length=50, choices=USER_ROLES)
+    username = models.CharField('username ',max_length=50)
+    platform = models.CharField('platform ',max_length=50, choices=PLATFORMS)
+    role = models.CharField('role ',max_length=50, choices=USER_ROLES)
 
     class Meta:
         verbose_name = 'UserProfile'
         verbose_name_plural = 'UserProfile'
         ordering = ('user_id',)
+        indexes = [
+            models.Index(fields=['user_id']),
+        ]
+
 
     def __str__(self):
         return f'{self.user_id} {self.username} {self.platform} {self.role}'
@@ -40,6 +44,10 @@ class Notification(models.Model):
         verbose_name = 'Напоминания'
         verbose_name_plural = 'Напоминание'
         ordering = ('user_id',)
+        indexes = [
+            models.Index(fields=['user_id']),
+        ]
+
 
     def __str__(self):
         return f'{self.user_id} {self.platform} {self.days_of_week} {self.time}'
@@ -60,6 +68,10 @@ class Content(models.Model):
         verbose_name = 'Content'
         verbose_name_plural = 'Content'
         ordering = ('-date',)
+        indexes = [
+            models.Index(fields=['code_gift']),
+        ]
+
 
     def __str__(self):
         return f'{self.code_gift}'

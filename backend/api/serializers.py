@@ -41,3 +41,14 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
+
+
+class NotificationCreateByUIDSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(
+        slug_field='user_id',
+        queryset=UserProfile.objects.all()
+    )
+
+    class Meta:
+        model = Notification
+        fields = ('user', 'platform', 'days_of_week', 'time')

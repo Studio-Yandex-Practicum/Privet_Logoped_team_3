@@ -5,9 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from api.serializers import ContentSerializer, NotificationSerializer, \
-    UserProfileSerializer, \
-    UserProfileUpdateSerializer
+from api.serializers import (ContentSerializer, NotificationSerializer,
+                             UserProfileSerializer,
+                             UserProfileUpdateSerializer,
+                             NotificationCreateByUIDSerializer)
 from bot.models import Content, Notification, UserProfile
 
 
@@ -21,7 +22,8 @@ class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
     @action(
         methods=['get', 'put'],
         detail=False,
-        url_path='uid/(?P<user_id>[''^/.]+)'
+        url_path='uid/(?P<user_id>[^/.]+)'
+        # url_path='uid/(?P<user_id>[''^/.]+)'
     )
     def uid_retrieve_update(self, request, user_id=None):
         """Чтение и обновление профиля UID."""
@@ -68,9 +70,23 @@ class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
 
     @action(methods=['post'], detail=False, url_path='uid')
-    def uid_create(self, request):
+    def notification_create(self, request):
         """Создание напоминания по UID."""
-        serializer = self.get_serializer(data=request.data)
+        serializer = NotificationCreateByUIDSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=HTTPStatus.CREATED)
+
+    @action(
+        methods=['get'],
+        detail=False,
+        url_path='uid/(?P<user_id>[^/.]+)'
+    )
+    def notification_retreive(self, request, user_id):
+        """Создание напоминания по UID."""
+        queryset = Notification.objects.filter(user_id=user_id)
+        # serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(queryset, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=HTTPStatus.OK)
