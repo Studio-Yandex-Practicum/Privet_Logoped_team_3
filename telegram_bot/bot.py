@@ -1,14 +1,16 @@
-import asyncio
+import keyboards
 
+from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.filters import Command
 
-import keyboards
+from config import bot_env
 
-bot = Bot(
-    "7436763245:AAE8FHxQVuuPcpNSEtuQcQ-D1EiPY6OdGAg",
-)
+load_dotenv('.env')
+
+
+bot = Bot(bot_env.bot_token)
 dp = Dispatcher()
 
 
@@ -44,7 +46,3 @@ async def role(message: Message):
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

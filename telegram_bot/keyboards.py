@@ -1,8 +1,6 @@
 from aiogram.types import (
     ReplyKeyboardMarkup,  # Клавиатура под полем ввода
     KeyboardButton,  # Кнопки для Reply клавиатуры
-    InlineKeyboardMarkup,  # Клавиатура под сообщениями
-    InlineKeyboardButton  # Кнопки для Inline клавиатуры
 )
 
 main_kb = ReplyKeyboardMarkup(
@@ -23,9 +21,12 @@ main_kb = ReplyKeyboardMarkup(
             KeyboardButton(text="Связаться с логопедом")
         ]
     ],
-    resize_keyboard=True,  # Подстраивает размер кнопок под телефон
-    one_time_keyboard=True,  # Скрывает клавиатуру после нажатия кнопки
-    input_field_placeholder="Выберите действие из меню",  # выводит сообщение в поле ввода во время работы с меню
+    # Подстраивает размер кнопок под телефон
+    resize_keyboard=True,
+    # Скрывает клавиатуру после нажатия кнопки
+    one_time_keyboard=True,
+    # выводит сообщение в поле ввода во время работы с меню
+    input_field_placeholder="Выберите действие из меню",
 
 )
 
@@ -37,7 +38,10 @@ role_kb = ReplyKeyboardMarkup(
             KeyboardButton(text="Логопед")
         ]
     ],
-    resize_keyboard=True,  # Подстраивает размер кнопок под телефон
-    one_time_keyboard=True,  # Скрывает клавиатуру после нажатия кнопки
-    input_field_placeholder="Выберите роль",  # выводит сообщение в поле ввода во время работы с меню
+    # Подстраивает размер кнопок под телефон
+    resize_keyboard=True,
+    # Скрывает клавиатуру после нажатия кнопки
+    one_time_keyboard=True,
+    # выводит сообщение в поле ввода во время работы с меню
+    input_field_placeholder="Выберите роль",
 )
