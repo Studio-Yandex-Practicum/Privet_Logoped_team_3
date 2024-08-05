@@ -43,7 +43,7 @@ class Notification(models.Model):
     class Meta:
         verbose_name = 'Напоминания'
         verbose_name_plural = 'Напоминание'
-        ordering = ('user_id',)
+        ordering = ('time',)
         indexes = [
             models.Index(fields=['user_id']),
             models.Index(fields=['platform']),
