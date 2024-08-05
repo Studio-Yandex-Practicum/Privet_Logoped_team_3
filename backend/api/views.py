@@ -84,7 +84,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
     )
     def notification_retreive(self, request, user_id):
         """Создание напоминания по UID."""
-        queryset = Notification.objects.filter(user_id=user_id)
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+        queryset = Notification.objects.filter(user_id=user_profile)
         # serializer = self.get_serializer(data=request.data)
         serializer = self.get_serializer(queryset, many=True)
         serializer.is_valid(raise_exception=True)
