@@ -46,8 +46,9 @@ class Notification(models.Model):
         ordering = ('user_id',)
         indexes = [
             models.Index(fields=['user_id']),
+            models.Index(fields=['platform']),
+            models.Index(fields=['time']),
         ]
-
 
     def __str__(self):
         return f'{self.user_id} {self.platform} {self.days_of_week} {self.time}'
