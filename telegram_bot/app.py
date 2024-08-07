@@ -1,5 +1,5 @@
-import logging
 import asyncio
+import logging
 
 from bot import main
 
@@ -10,7 +10,7 @@ def configure_logging(level=logging.INFO):
     logging.basicConfig(
         level=level,
         datefmt='%Y-%m-%d %H:%M:%S',
-        format='%(asctime)s - %(module)s - %(lineno)d - %(message)s'
+        format='%(asctime)s - %(module)s - %(lineno)d - %(message)s',
     )
 
 
