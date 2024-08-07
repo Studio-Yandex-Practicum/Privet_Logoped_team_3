@@ -1,10 +1,15 @@
 import os
+from dataclasses import dataclass
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
+@dataclass
 class Config:
-
-    def __init__(self):
-        self.bot_token = os.getenv('BOT_TOKEN')
+    bot_token: str = os.getenv('BOT_TOKEN')
+    host: str = os.getenv('HOST')
 
 
 bot_env = Config()
