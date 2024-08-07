@@ -2,7 +2,7 @@ import json
 import logging
 from http import HTTPStatus
 
-from api.schemas import ContentOne, ContentMany
+from api.schemas import ContentOne
 from api.utils import async_http_get
 from config import bot_env
 
@@ -24,8 +24,8 @@ class MainMenu:
 
     @staticmethod
     async def get_video():
-        value = await MainMenu._get_content()
-        return value.url_gift
+        content = await MainMenu._get_content()
+        return f'Рекомендуем посмотреть это видео: ' + content.url_gift
 
     @staticmethod
     async def get_payment():
@@ -33,7 +33,9 @@ class MainMenu:
 
     @staticmethod
     async def get_result():
-        return 'get_result в процессе реализации'
+        content = await MainMenu._get_content()
+        return ('У меня для Вас есть специальный файлик, который поможет вам '
+                f'следить за прогрессом ребенка:' + content.track_file)
 
     @staticmethod
     async def get_app_help():
