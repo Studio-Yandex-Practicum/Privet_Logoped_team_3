@@ -133,6 +133,5 @@ dmypy.json
 /sample/
 *.zip
 db.sqlite3.*
-*.txt
 /sqlite.db
 /read.me

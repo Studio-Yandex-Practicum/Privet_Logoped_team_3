@@ -3,7 +3,7 @@ import logging
 from vkbottle.bot import BotLabeler, Message
 from vkbottle.dispatch.rules.base import CommandRule
 
-from api.api import send_id
+from api.api import Roles
 from constants import (GREETING_MESSAGE, COMMAND_PREFIXES,
     ROLE_MESSAGE, START_MENU_CMD)
 from routers.keyboard import main_keyboard, ROLE_MENU, start_keyboard
@@ -28,9 +28,10 @@ async def role_menu(message: Message):
 async def sub_role_menu(message: Message):
     """Установка роли для id Родитель/Логопед"""
     log.info('Received role command: %s', message.text)
-    await send_id(message.from_id)
+    await Roles.send_role_for_id(message.from_id, message.text)
     print(message.from_id)
     print("Установка роли для id Родитель/Логопед")
+
     await message.answer(
         GREETING_MESSAGE,
         keyboard=main_keyboard()
