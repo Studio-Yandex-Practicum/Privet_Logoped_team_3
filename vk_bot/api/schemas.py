@@ -1,7 +1,11 @@
 from pydantic import BaseModel
 
 
-class PostResponse(BaseModel):
-    status: int
-    message: str
+class DefaultUserProfile(BaseModel):
+    username: str
+    platform: str
+    role: str
 
+
+class UserProfile(DefaultUserProfile):
+    user_id: int
