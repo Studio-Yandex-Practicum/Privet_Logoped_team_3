@@ -2,9 +2,11 @@ from vkbottle import Keyboard, Text
 
 BUTTONS_PER_LINE = 2
 
+MAIN_MENU_COMMAND = 'Главное меню'
+
 ROLE_MENU = (
     'Родитель',
-    'Логопед'
+    'Логопед',
 )
 
 MAIN_MENU = (
@@ -16,23 +18,18 @@ MAIN_MENU = (
     'Помощь с приложением'
 )
 
+HELP_MENU = (
+    'Помощь в установке',
+    'Вывод на ПК',
+    MAIN_MENU_COMMAND,
+)
 
-def main_keyboard():
+
+def make_keyboard_menu(menu_items):
     buttons = [
-        Text(item) for item in MAIN_MENU
+        Text(item) for item in menu_items
     ]
 
-    return make_keyboard(
-        buttons,
-        buttons_per_line=BUTTONS_PER_LINE,
-        inline=True
-    )
-
-
-def start_keyboard():
-    buttons = [
-        Text(item) for item in ROLE_MENU
-    ]
     return make_keyboard(
         buttons,
         buttons_per_line=BUTTONS_PER_LINE,
