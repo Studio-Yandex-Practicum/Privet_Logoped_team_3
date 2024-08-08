@@ -10,14 +10,20 @@ class SecretWord:
 
     @staticmethod
     async def check(word):
-        content = await SecretWord._get_secret_word()
-        if word == content.code_gift:
+        try:
+            content = await SecretWord._get_secret_word()
+            if word == content.code_gift:
+                return {
+                    'text': 'Правильно! Вот ваш подарок: {url_gift}'
+                }
             return {
-                'text': 'Правильно! Вот ваш подарок: {url_gift}'
+                'text': 'Неправильно! Но Вы можете попробовать еще раз!'
             }
-        return {
-            'text': 'Неправильно! Но Вы можете попробовать еще раз!'
-        }
+        except Exception:
+            return {
+                'text': 'Сервис недоступен. Попробуйте позднее'
+            }
+
 
     @staticmethod
     async def _get_secret_word():
