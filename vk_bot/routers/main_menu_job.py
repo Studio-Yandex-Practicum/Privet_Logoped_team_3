@@ -12,6 +12,13 @@ from routers.states import States
 log = logging.getLogger(__name__)
 
 
+SECRET_WORD = 'Введите секретное слово:'
+GET_VIDEO = 'Рекомендуем посмотреть это видео: '
+GET_RESULT = ('У меня для Вас есть специальный файлик, который поможет вам '
+              'следить за прогрессом ребенка:')
+GET_HELP = 'Вот чем я могу Вам помочь:'
+
+
 class MainMenu:
 
     @staticmethod
@@ -33,7 +40,7 @@ class MainMenu:
     async def get_video():
         content = await MainMenu._get_content()
         return {
-            'text': f'Рекомендуем посмотреть это видео: ' + content.url_gift
+            'text': GET_VIDEO + content.url_gift
         }
 
     @staticmethod
@@ -56,22 +63,20 @@ class MainMenu:
         )
         # await message_base.set_state(States.waiting_for_code)
         return {
-            'text': 'Введите секретное слово:'
+            'text': SECRET_WORD
         }
 
     @staticmethod
     async def get_result():
         content = await MainMenu._get_content()
         return {
-            'text': ('У меня для Вас есть специальный файлик, который '
-                     'поможет вам '
-                     f'следить за прогрессом ребенка:' + content.track_file)
+            'text': GET_RESULT + content.track_file
         }
 
     @staticmethod
     async def get_app_help():
         return {
-            'text': 'Вот чем я могу Вам помочь:',
+            'text': GET_HELP,
             'keyboard': make_keyboard_menu(HELP_MENU)
         }
 

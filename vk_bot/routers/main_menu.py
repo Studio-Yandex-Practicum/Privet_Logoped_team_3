@@ -29,7 +29,6 @@ async def role_menu(message: Message):
     await message.answer(
         ROLE_MESSAGE,
         keyboard=make_keyboard_menu(ROLE_MENU)
-        # keyboard=start_keyboard()
     )
 
 
@@ -49,7 +48,6 @@ async def sub_role_menu(message: Message):
     await message.answer(
         GREETING_MESSAGE,
         keyboard=make_keyboard_menu(MAIN_MENU)
-        # keyboard=main_keyboard()
     )
 
 
@@ -62,7 +60,6 @@ async def main_menu(message: Message):
     await message.answer(
         GREETING_MESSAGE,
         keyboard=make_keyboard_menu(MAIN_MENU)
-        # keyboard=main_keyboard()
         )
 
 
@@ -85,7 +82,6 @@ async def show_main_menu(message: Message):
     await message.answer(
         MAIN_MENU_COMMAND,
         keyboard=make_keyboard_menu(MAIN_MENU)
-        # keyboard=main_keyboard()
     )
 
 
@@ -108,5 +104,4 @@ async def secret_word_handler(message: Message):
     response = await SecretWord.check(message.text)
     await message.answer(
         response['text'],
-        # keyboard=response.get('keyboard')
     )
