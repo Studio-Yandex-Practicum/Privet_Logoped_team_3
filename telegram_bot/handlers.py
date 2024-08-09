@@ -10,11 +10,21 @@ router = Router()
 
 @router.message(F.text == lexicon.buttons.logoped)
 async def role_logoped(message: Message):
+    data = {
+        'username': message.from_user.username,
+        'user_id': message.from_user.id,
+        'role': 'speech_therapist',
+        'platform': 'tg',
+    }
     await message.answer(
         text=lexicon.messages.role_logoped,
         reply_markup=keyboards.main_kb,
     )
-    # TODO: Логика сохраниения или изменения пользователя в базе данных
+    async with aiohttp.ClientSession() as session:
+        await session.post(
+            f'{bot_env.host}/api/v1/profile/uid/',
+            json=data,
+        )
 
 
 @router.message(F.text == lexicon.buttons.parent)
@@ -34,7 +44,6 @@ async def role_parent(message: Message):
             f'{bot_env.host}/api/v1/profile/uid/',
             json=data,
         )
-    # TODO: Логика сохраниения или изменения пользователя в базе данных
 
 
 @router.message(F.text == lexicon.buttons.usefull_video)
