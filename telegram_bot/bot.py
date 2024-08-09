@@ -3,6 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from handlers import router
 from config import bot_env
+from lexicon import lexicon
 import keyboards
 
 bot = Bot(bot_env.bot_token)
@@ -13,10 +14,7 @@ dp.include_router(router)
 @dp.message(Command('start'))
 async def start(message: Message):
     await message.answer(
-        (
-            'Добро пожаловать в бота "Привет, Логопед!".\n'
-            'Давайте познакомимся, выберите свою роль:'
-        ),
+        text=lexicon.messages.start,
         reply_markup=keyboards.role_kb,
     )
 
@@ -24,7 +22,7 @@ async def start(message: Message):
 @dp.message(Command('menu'))
 async def menu(message: Message):
     await message.answer(
-        'Вот с чем я могу Вам помочь:',
+        text=lexicon.messages.menu,
         reply_markup=keyboards.main_kb,
     )
 

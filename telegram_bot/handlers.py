@@ -1,90 +1,87 @@
-import aiofiles
+import aiohttp
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 
+from config import bot_env
+from lexicon import lexicon
 import keyboards
 
 
 router = Router()
 
 
-@router.message(F.text == 'Логопед')
+@router.message(F.text == lexicon.buttons.logoped)
 async def role_logoped(message: Message):
-    """Обработчик для логопеда."""
-    async with aiofiles.open('logoped_id.txt', 'a') as file:
-        await file.write(f'{message.from_user.id}\n')
     await message.answer(
-        'Вы вошли как логопед.\n'
-        'Вот с чем я могу Вам помочь:',
+        text=lexicon.messages.role_logoped,
         reply_markup=keyboards.main_kb,
     )
-    # Логика сохраниения или изменения пользователя в базе данных
+    # TODO: Логика сохраниения или изменения пользователя в базе данных
 
 
-@router.message(F.text == 'Родитель')
+@router.message(F.text == lexicon.buttons.parent)
 async def role_parent(message: Message):
-    """Обработчик для родителя."""
-    async with aiofiles.open('parent_id.txt', 'a') as file:
-        await file.write(f'{message.from_user.id}\n')
+    data = {
+        'username': message.from_user.username,
+        'user_id': message.from_user.id,
+        'role': 'parent',
+        'platform': 'tg',
+    }
     await message.answer(
-        'Вы вошли как родитель.\n'
-        'Вот с чем я могу Вам помочь:',
+        text=lexicon.messages.role_parent,
         reply_markup=keyboards.main_kb,
     )
-    # Логика сохраниения или изменения пользователя в базе данных
+    async with aiohttp.ClientSession() as session:
+        await session.post(
+            f'{bot_env.host}/api/v1/profile/uid/',
+            json=data,
+        )
+    # TODO: Логика сохраниения или изменения пользователя в базе данных
 
 
-@router.message(F.text == 'Полезное видео')
-async def take_useful_video(message: Message):
-    """Обработчик для кнопки "Полезное видео"."""
-    await message.answer('Видео с полезной информацией')
+@router.message(F.text == lexicon.buttons.usefull_video)
+async def take_usefull_video(message: Message):
+    await message.answer('Тут будет ссылка на полезное видео')
 
 
-@router.message(F.text == 'Отследить результаты')
+@router.message(F.text == lexicon.buttons.track_results)
 async def take_track_results(message: Message):
-    """Обработчик для кнопки "Отследить результаты"."""
-    await message.answer('Отследить результаты')
+    await message.answer('Тут будет файл бланка')
 
 
-@router.message(F.text == 'Оплата')
+@router.message(F.text == lexicon.buttons.payment)
 async def help_with_payment(message: Message):
-    """Обработчик для кнопки "Оплата"."""
-    await message.answer('Оплата')
+    await message.answer('Тут будет помощь с оплатой')
 
 
-@router.message(F.text == 'Уведомления')
+@router.message(F.text == lexicon.buttons.notifications)
 async def set_notifications(message: Message):
-    """Обработчик для кнопки "Уведомления"."""
-    await message.answer('Уведомления')
+    await message.answer('Как я понимаю настройки уведомлений')
 
 
-@router.message(F.text == 'Подарок')
+@router.message(F.text == lexicon.buttons.gift)
 async def take_gift(message: Message):
-    """Обработчик для кнопки "Подарок"."""
-    await message.answer('Подарок')
+    await message.answer('Тут нужно будет ввести промокод?')
 
 
-@router.message(F.text == 'Помощь с приложением')
+@router.message(F.text == lexicon.buttons.help)
 async def take_help(message: Message):
-    """Обработчик для кнопки "Помощь с приложением"."""
-    await message.answer('Помощь с приложением')
+    await message.answer('Какая-то помощь с приложением')
 
 
-@router.message(F.text == 'Связаться с логопедом')
-async def contact_logoped(message: Message):
-    """Обработчик для кнопки "Связаться с логопедом"."""
+@router.message(F.text == lexicon.buttons.contact_logoped)
+async def confirmation_contact(message: Message):
     await message.answer(
-        'Связаться с логопедом?',
+        text=lexicon.messages.confirmation_contact,
         reply_markup=keyboards.confirmation_contact_kb,
     )
 
 
 @router.callback_query(F.data == 'main_menu')
 async def callback_main_menu(callback: CallbackQuery):
-    """Обработчик для кнопки "Нет"."""
     await callback.answer()
     await callback.message.delete()
     await callback.message.answer(
-        'Вот с чем я могу Вам помочь:',
+        text=lexicon.messages.menu,
         reply_markup=keyboards.main_kb,
     )
