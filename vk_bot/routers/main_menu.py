@@ -15,7 +15,8 @@ from routers.keyboard import (
 from routers.main_menu_job import MainMenu
 from routers.payment_job import PaymentMenu
 from routers.secret_word_job import SecretWord
-from routers.states import States
+from routers.states import States, TimeStates
+from routers.time_notification import TimeNotification
 
 log = logging.getLogger(__name__)
 
@@ -103,6 +104,17 @@ async def secret_word_handler(message: Message):
     # await message.reset_state()
     await bot_cfg.bot.state_dispenser.delete(message.peer_id)
     response = await SecretWord.check(message.text)
+    await message.answer(
+        response['text'],
+    )
+
+
+@bl.private_message(state=TimeStates.waiting_for_time)
+async def time_notification_handler(message: Message):
+    """Обработка проверки времени уведомления."""
+    log.info('Check time notificatiob: %s', message.text)
+    await bot_cfg.bot.state_dispenser.delete(message.peer_id)
+    response = await TimeNotification.response(message.text)
     await message.answer(
         response['text'],
     )

@@ -8,7 +8,7 @@ import bot_cfg
 from config import bot_env
 from routers.keyboard import HELP_MENU, MAIN_MENU, make_keyboard_menu, \
     PAYMENT_MENU
-from routers.states import States
+from routers.states import States, TimeStates
 
 log = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ GET_VIDEO = 'Рекомендуем посмотреть это видео: '
 GET_RESULT = ('У меня для Вас есть специальный файлик, который поможет вам '
               'следить за прогрессом ребенка:')
 GET_HELP = 'Вот чем я могу Вам помочь:'
+GET_NOTIFICATION = 'Введите время получения уведомления в формате ЧЧ:ММ'
 
 
 class MainMenu:
@@ -31,7 +32,7 @@ class MainMenu:
         elif message == MAIN_MENU[2]:
             return await MainMenu.get_payment()
         elif message == MAIN_MENU[3]:
-            return await MainMenu.get_notification()
+            return await MainMenu.get_notification(message_base)
         elif message == MAIN_MENU[4]:
             return await MainMenu.get_present(message_base)
         elif message == MAIN_MENU[5]:
@@ -52,9 +53,14 @@ class MainMenu:
         }
 
     @staticmethod
-    async def get_notification():
+    async def get_notification(message_base):
+        await bot_cfg.bot.state_dispenser.set(
+            message_base.peer_id,
+            TimeStates.waiting_for_time
+        )
         return {
-            'text': 'get_notification в процессе реализации'
+            'text': GET_NOTIFICATION
+            # 'text': 'get_notification в процессе реализации'
         }
 
     @staticmethod
