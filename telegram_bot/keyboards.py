@@ -48,12 +48,10 @@ confirmation_contact_kb = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(
-                text=lexicon.buttons.yes,
-                url='https://t.me/BotFather'
+                text=lexicon.buttons.yes, url='https://t.me/BotFather'
             ),
             InlineKeyboardButton(
-                text=lexicon.buttons.no,
-                callback_data='main_menu'
+                text=lexicon.buttons.no, callback_data='main_menu'
             ),
         ]
     ]
