@@ -1,11 +1,9 @@
 import aiohttp
-from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery
-
+import keyboards
+from aiogram import F, Router
+from aiogram.types import CallbackQuery, Message
 from config import bot_env
 from lexicon import lexicon
-import keyboards
-
 
 router = Router()
 

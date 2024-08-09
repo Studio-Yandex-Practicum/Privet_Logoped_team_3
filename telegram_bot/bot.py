@@ -1,10 +1,10 @@
+import keyboards
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.types import Message
-from handlers import router
 from config import bot_env
+from handlers import router
 from lexicon import lexicon
-import keyboards
 
 bot = Bot(bot_env.bot_token)
 dp = Dispatcher()
