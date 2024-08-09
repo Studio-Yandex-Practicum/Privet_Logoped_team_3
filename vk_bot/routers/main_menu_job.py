@@ -6,7 +6,8 @@ from api.schemas import ContentOne
 from api.utils import async_http_get
 import bot_cfg
 from config import bot_env
-from routers.keyboard import HELP_MENU, MAIN_MENU, make_keyboard_menu
+from routers.keyboard import HELP_MENU, MAIN_MENU, make_keyboard_menu, \
+    PAYMENT_MENU
 from routers.states import States
 
 log = logging.getLogger(__name__)
@@ -46,7 +47,8 @@ class MainMenu:
     @staticmethod
     async def get_payment():
         return {
-            'text': 'get_result в процессе реализации'
+            'text': 'Меню оплаты:',
+            'keyboard': make_keyboard_menu(PAYMENT_MENU)
         }
 
     @staticmethod

@@ -24,6 +24,12 @@ HELP_MENU = (
     MAIN_MENU_COMMAND,
 )
 
+PAYMENT_MENU = (
+    'Купить полную версию',
+    'Как купить для IOS',
+    MAIN_MENU_COMMAND,
+)
+
 
 def make_keyboard_menu(menu_items):
     buttons = [

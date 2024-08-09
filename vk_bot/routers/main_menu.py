@@ -10,9 +10,10 @@ from constants import (COMMAND_PREFIXES, GREETING_MESSAGE, ROLE_MESSAGE,
 from routers.help_menu_job import HelpMenu
 from routers.keyboard import (
     HELP_MENU, MAIN_MENU, MAIN_MENU_COMMAND, make_keyboard_menu,
-    ROLE_MENU,
+    PAYMENT_MENU, ROLE_MENU,
 )
 from routers.main_menu_job import MainMenu
+from routers.payment_job import PaymentMenu
 from routers.secret_word_job import SecretWord
 from routers.states import States
 
@@ -105,3 +106,15 @@ async def secret_word_handler(message: Message):
     await message.answer(
         response['text'],
     )
+
+
+@bl.private_message(text=PAYMENT_MENU)
+async def show_payment_menu(message: Message):
+    """Обработка команд PAYMENT_MENU."""
+    log.info('Received PAYMENT_MENU command: %s', message.text)
+    response_message = await PaymentMenu.response(message.text)
+    await message.answer(
+        response_message['text'],
+        # keyboard=response_message.get('keyboard')
+    )
+
