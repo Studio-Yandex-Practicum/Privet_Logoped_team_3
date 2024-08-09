@@ -1,5 +1,8 @@
 import re
 
+TIME_NOTIFICATION_CORRECT = 'Время введено корректно, нужно сохранить в БД'
+TIME_NOTIFICATION_INCORRECT = 'Время введено некорректно, действие отменено'
+
 
 class TimeNotification:
 
@@ -8,10 +11,10 @@ class TimeNotification:
         if TimeNotification.test_time_format(message):
             TimeNotification.save_to_db(message)
             return {
-                'text': 'Время введено корректно, нужно сохранить в БД'
+                'text': TIME_NOTIFICATION_CORRECT
             }
         return {
-            'text': 'Время введено некорректно, действие отменено'
+            'text': TIME_NOTIFICATION_INCORRECT
         }
 
     @staticmethod
