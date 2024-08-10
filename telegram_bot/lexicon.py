@@ -1,8 +1,7 @@
-from dataclasses import dataclass
+from typing import NamedTuple
 
 
-@dataclass
-class Buttons:
+class Buttons(NamedTuple):
     # Main menu
     usefull_video: str = 'Полезное видео'
     track_results: str = 'Отследить результаты'
@@ -19,14 +18,12 @@ class Buttons:
     no: str = 'Нет'
 
 
-@dataclass
-class Placeholders:
+class Placeholders(NamedTuple):
     role: str = 'Выберите роль'
     action: str = 'Выберите действие из меню'
 
 
-@dataclass
-class Messages:
+class Messages(NamedTuple):
     start: str = (
         'Добро пожаловать в бота "Привет, Логопед!".\n'
         'Давайте познакомимся, выберите свою роль:'
@@ -37,8 +34,7 @@ class Messages:
     confirmation_contact: str = 'Связаться с логопедом?'
 
 
-@dataclass
-class Lexicon:
+class Lexicon(NamedTuple):
     buttons: Buttons = Buttons()
     placeholders: Placeholders = Placeholders()
     messages: Messages = Messages()
