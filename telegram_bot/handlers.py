@@ -72,7 +72,10 @@ async def set_notifications(message: Message):
 
 @router.message(F.text == lexicon.buttons.gift)
 async def take_gift(message: Message, state: FSMContext):
-    await message.answer('Тут нужно будет ввести промокод?')
+    await message.answer(
+        text=lexicon.messages.input_promocode,
+        reply_markup=keyboards.back_to_main_menu_kb,
+    )
     await state.set_state(FSMGift.input_promocode)
 
 

@@ -16,6 +16,8 @@ class Buttons(NamedTuple):
     # Confirmation contact menu
     yes: str = 'Да'
     no: str = 'Нет'
+    # Back to main menu
+    back: str = 'Назад'
 
 
 class Placeholders(NamedTuple):
@@ -32,6 +34,8 @@ class Messages(NamedTuple):
     role_logoped: str = 'Вы вошли как логопед.\nВот с чем я могу Вам помочь:'
     role_parent: str = 'Вы вошли как родитель.\nВот с чем я могу Вам помочь:'
     confirmation_contact: str = 'Связаться с логопедом?'
+    # Promocode menu
+    input_promocode: str = 'Вы можете ввести промокод:'
 
 
 class Lexicon(NamedTuple):

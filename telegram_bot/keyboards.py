@@ -56,3 +56,14 @@ confirmation_contact_kb = InlineKeyboardMarkup(
         ]
     ]
 )
+
+
+back_to_main_menu_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.back, callback_data='main_menu'
+            )
+        ]
+    ]
+)
