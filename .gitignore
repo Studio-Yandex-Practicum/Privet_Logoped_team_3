@@ -133,4 +133,4 @@ dmypy.json
 .idea
 
 # usefull tools
-ruff.toml
+pyproject.toml
