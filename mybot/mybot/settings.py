@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api',
+    'telegram_bot',
+    'vk_bot',
 ]
 
 MIDDLEWARE = [
