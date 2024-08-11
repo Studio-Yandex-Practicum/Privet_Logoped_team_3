@@ -1,10 +1,12 @@
 import aiohttp
-import keyboards
+
 from aiogram import F, Router
-from aiogram.types import CallbackQuery, Message
 from aiogram.filters.state import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
+from aiogram.types import CallbackQuery, Message
+
+import keyboards
 from config import bot_env
 from lexicon import lexicon
 from states import FSMGift

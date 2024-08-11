@@ -1,10 +1,12 @@
-import keyboards
 from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.filters import Command
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
-from config import bot_env
+
 from handlers import router
+
+import keyboards
+from config import bot_env
 from lexicon import lexicon
 
 bot = Bot(bot_env.bot_token)

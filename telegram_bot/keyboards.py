@@ -1,6 +1,7 @@
 from aiogram.types import KeyboardButton  # Кнопки для Reply клавиатуры
 from aiogram.types import ReplyKeyboardMarkup  # Клавиатура под полем ввода
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
 from lexicon import lexicon
 
 main_kb = ReplyKeyboardMarkup(
