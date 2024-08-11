@@ -2,8 +2,12 @@ import aiohttp
 import keyboards
 from aiogram import F, Router
 from aiogram.types import CallbackQuery, Message
+from aiogram.filters.state import StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import default_state
 from config import bot_env
 from lexicon import lexicon
+from states import FSMGift
 
 router = Router()
 
@@ -67,8 +71,15 @@ async def set_notifications(message: Message):
 
 
 @router.message(F.text == lexicon.buttons.gift)
-async def take_gift(message: Message):
+async def take_gift(message: Message, state: FSMContext):
     await message.answer('Тут нужно будет ввести промокод?')
+    await state.set_state(FSMGift.input_promocode)
+
+
+@router.message(StateFilter(FSMGift.input_promocode))
+async def take_promocode(message: Message, state: FSMContext):
+    await message.answer(f'Промокод: {message.text}')
+    await state.set_state(default_state)
 
 
 @router.message(F.text == lexicon.buttons.help)
