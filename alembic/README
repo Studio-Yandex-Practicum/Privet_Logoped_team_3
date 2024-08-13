@@ -1,0 +1,16 @@
+Основные команды:
+alembic init - Инициализация библиотеки в проекте
+
+alembic revision --autogenerate -m "Initial structure" --rev-id 01 - Создание миграций с id и названием
+
+alembic upgrade head - Применение всех невыполненых миграций
+alembic upgrade +1 - Применение 1-й следующей миграции миграций
+
+alembic downgrade base - Отмена всех миграций
+alembic downgrade -1 - Отмена 1-й предыдущей миграции
+
+alembic history - Вывод всех миграций в хронологическом порядке
+alembic history -v - Более подробный вывод
+alembic history -i - Вывод истории с меткой текущей миграции
+
+alembic currenta- Просмотр последней примененной миграции
