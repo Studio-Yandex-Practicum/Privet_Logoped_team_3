@@ -3,8 +3,11 @@ import logging
 from http import HTTPStatus
 
 from api.schemas import UserProfile
-from api.utils import async_http_get, async_http_patch, async_http_post, \
+from api.utils import (
+    async_http_get,
+    async_http_post,
     async_http_put
+)
 from config import bot_env
 
 log = logging.getLogger(__name__)
