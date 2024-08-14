@@ -1,11 +1,10 @@
 import json
 import logging
-from datetime import datetime
 from http import HTTPStatus
 
+import bot_cfg
 from api.schemas import Notifications
 from api.utils import async_http_get
-import bot_cfg
 from config import bot_env
 
 log = logging.getLogger(__name__)

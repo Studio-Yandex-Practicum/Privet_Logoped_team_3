@@ -123,7 +123,7 @@ async def time_notification_handler(message: Message):
     """Обработка проверки времени уведомления."""
     log.info('Check time notificatiob: %s', message.text)
     await bot_cfg.bot.state_dispenser.delete(message.peer_id)
-    response = await TimeNotification.response(message.text)
+    response = await TimeNotification.response(message.text, message.peer_id)
     await message.answer(
         response['text'],
     )

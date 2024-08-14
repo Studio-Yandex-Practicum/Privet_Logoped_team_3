@@ -7,9 +7,9 @@ TIME_NOTIFICATION_INCORRECT = 'Время введено некорректно,
 class TimeNotification:
 
     @staticmethod
-    async def response(message):
-        if TimeNotification.test_time_format(message):
-            TimeNotification.save_to_db(message)
+    async def response(time_string, uid):
+        if TimeNotification.test_time_format(time_string):
+            TimeNotification.save_to_db(time_string, uid)
             return {
                 'text': TIME_NOTIFICATION_CORRECT
             }
@@ -19,9 +19,10 @@ class TimeNotification:
 
     @staticmethod
     def test_time_format(time_string):
-        pattern = r'^(?:[01]\d|2[0-3]):[0-5]\d$'
+        """Проверка формата введенного времени."""
+        pattern = r'^(?:[01]?\d|2[0-3]):[0-5]\d$'
         return bool(re.match(pattern, time_string))
 
     @staticmethod
-    def save_to_db(time_string):
-        pass
+    def save_to_db(time_string, uid):
+        """Сохранение или обновление записи в бд."""
