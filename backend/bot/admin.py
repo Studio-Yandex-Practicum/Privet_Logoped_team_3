@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from .models import UserProfile, Notification, Content
 
-admin.site.unregister(User)
+# admin.site.unregister(User)
+admin.site.unregister(Group)
 
 
 class UserProfileAdmin(UserAdmin):
@@ -14,16 +15,37 @@ class UserProfileAdmin(UserAdmin):
         'role',
         'platform',
         'is_active',
-        'is_staff'
     )
     search_fields = ('username', 'email', 'user_id')
     list_filter = ('role', 'platform')
+
+    # Переопределяем поля формы, исключаем "is_staff" и "is_superuser"
+    fieldsets = (
+        (None, {'fields': ('username',)}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Permissions', {'fields': ('is_active',)}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Additional info', {'fields': ('user_id', 'platform', 'role')}),
+    )
+
+    # Убираем поля `groups` и `user_permissions` из админки
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(UserProfileAdmin, self).get_form(request, obj, **kwargs)
+        if 'groups' in form.base_fields:
+            del form.base_fields['groups']
+        if 'user_permissions' in form.base_fields:
+            del form.base_fields['user_permissions']
+        return form
+
+    def has_add_permission(self, request):
+        # Отключаем возможность добавления новых пользователей
+        return False
 
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
     list_display = (
-        'user',
+        'user_id',  # ЗДЕСЬ ИСПРАВИЛА
         'platform',
         'days_of_week',
         'time',

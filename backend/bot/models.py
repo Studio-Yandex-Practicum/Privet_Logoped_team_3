@@ -43,8 +43,8 @@ class UserProfile(AbstractUser):
     )
 
     class Meta:
-        verbose_name = 'UserProfile'
-        verbose_name_plural = 'UserProfile'
+        verbose_name = 'Пользователи'
+        verbose_name_plural = 'Пользователи'
         ordering = ('user_id',)
         indexes = [
             models.Index(fields=['user_id']),
@@ -89,7 +89,8 @@ class Notification(models.Model):
     )
     diff_to_msk = models.IntegerField(
         # Поле для указания разницы во времени относительно МСК
-        verbose_name="Разница с МСК"
+        verbose_name="Разница с МСК",
+        default=0
     )
 
     class Meta:
@@ -132,7 +133,9 @@ class Content(models.Model):
     )
     payment_url = models.URLField(
         # Поле для хранения URL для оплаты
-        verbose_name="URL оплаты"
+        verbose_name="URL оплаты",
+        blank=True,  # ЗДЕСЬ ИСПРАВИЛА (для миграций)
+        null=True
     )
     ios_payment = models.FileField(
         # Поле для загрузки файла оплаты для iOS
@@ -147,7 +150,9 @@ class Content(models.Model):
     present_on_pk = models.FileField(
         # Поле для загрузки файла для ПК
         upload_to='content/',
-        verbose_name="Файл для ПК"
+        verbose_name="Файл для ПК",
+        blank=True,  # ЗДЕСЬ ИСПРАВИЛА (для миграций)
+        null=True
     )
     date_created = models.DateTimeField(
         # Поле для хранения даты и времени создания контента
@@ -156,9 +161,9 @@ class Content(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Content'
-        verbose_name_plural = 'Content'
-        ordering = ('-date',)
+        verbose_name = 'Контент'
+        verbose_name_plural = 'Контент'
+        ordering = ('-date_created',)  # ЗДЕСЬ ИСПРАВИЛА
         indexes = [
             models.Index(fields=['code_gift']),
         ]
