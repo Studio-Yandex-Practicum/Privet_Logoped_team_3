@@ -22,6 +22,12 @@ class ContentOne(BaseModel):
     help_install_file: Optional[str]
     # present_on_PK: str
 
+
+class Notification(BaseModel):
+    platform: str
+    time: str
+    user_id: int
+
+
 class Notifications(BaseModel):
-    time: Optional[str]
-    uid: Optional[str]
+    notifications: list[Notification]

@@ -140,7 +140,6 @@ async def show_payment_menu(message: Message):
     )
 
 
-# @bot_cfg.bot.on.message(ChatActionRule("chat_invite_user", "chat_invite_user_by_link"))
 @bl.private_message(ChatActionRule('chat_invite_user'))
 async def wrapper(message: Message):
     await message.answer(
