@@ -1,12 +1,12 @@
 import logging
 
 from vkbottle.bot import BotLabeler, Message
-from vkbottle.dispatch.rules.base import CommandRule
+from vkbottle.dispatch.rules.base import CommandRule, ChatActionRule
 
 import bot_cfg
 from api.api import Roles
 from constants import (COMMAND_PREFIXES, GREETING_MESSAGE, ROLE_MESSAGE,
-                       START_MENU_CMD)
+                       START_MENU_CMD, MAIN_MENU_CMD, INVITE_MESSAGE)
 from routers.help_menu_job import HelpMenu
 from routers.keyboard import (
     HELP_MENU, MAIN_MENU, MAIN_MENU_COMMAND, make_keyboard_menu,
@@ -21,6 +21,15 @@ from routers.time_notification import TimeNotification
 log = logging.getLogger(__name__)
 
 bl = BotLabeler()
+
+# @bot.on.chat_message(
+#     (
+#         rules.ChatActionRule("chat_invite_user"),
+#         rules.ChatActionRule("chat_invite_user_by_link")
+#     )
+# )
+# async def user_joined(message: Message) -> None:
+#     await message.answer("Приветствуем в нашем чате")
 
 
 @bl.private_message(CommandRule(START_MENU_CMD, COMMAND_PREFIXES, 0))
@@ -77,7 +86,7 @@ async def sub_role_menu(message: Message):
         keyboard=response_message.get('keyboard'))
 
 
-@bl.private_message(text=MAIN_MENU_COMMAND)
+@bl.private_message(text=(MAIN_MENU_COMMAND,MAIN_MENU_CMD))
 async def show_main_menu(message: Message):
     """Переключение в главное меню."""
     log.info('Received switch to main menu command: %s', message.text)
@@ -130,3 +139,11 @@ async def show_payment_menu(message: Message):
         # keyboard=response_message.get('keyboard')
     )
 
+
+# @bot_cfg.bot.on.message(ChatActionRule("chat_invite_user", "chat_invite_user_by_link"))
+@bl.private_message(ChatActionRule('chat_invite_user'))
+async def wrapper(message: Message):
+    await message.answer(
+        INVITE_MESSAGE,
+        # keyboard=response_message.get('keyboard')
+    )

@@ -30,7 +30,7 @@ class MainMenu:
         elif message == MAIN_MENU[1]:
             return await MainMenu.get_result()
         elif message == MAIN_MENU[2]:
-            return await MainMenu.get_payment()
+            return await MainMenu.get_payment('Меню оплаты:')
         elif message == MAIN_MENU[3]:
             return await MainMenu.get_notification(message_base)
         elif message == MAIN_MENU[4]:
@@ -46,9 +46,9 @@ class MainMenu:
         }
 
     @staticmethod
-    async def get_payment():
+    async def get_payment(text):
         return {
-            'text': 'Меню оплаты:',
+            'text': text,
             'keyboard': make_keyboard_menu(PAYMENT_MENU)
         }
 

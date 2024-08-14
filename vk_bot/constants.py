@@ -1,5 +1,7 @@
 DB_PATH = 'sqlite:///sqlite.db'
 
+LOOPWRAPPER_INTERVAL = 10
+
 USER_TOKEN_MAX_LEN = 15
 
 COMMAND_PREFIXES = ['', '/']
@@ -8,3 +10,4 @@ START_MENU_CMD = 'старт'
 GREETING_MESSAGE = ('Добро пожаловать в бота “Привет, Логопед!”. '
                     'Пожалуйста выберите действия:”')
 ROLE_MESSAGE = ('Укажите вашу роль:')
+INVITE_MESSAGE = f'Комманды бота {START_MENU_CMD} {MAIN_MENU_CMD}'

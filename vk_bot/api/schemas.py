@@ -21,3 +21,7 @@ class ContentOne(BaseModel):
     payment_url: Optional[str]
     help_install_file: Optional[str]
     # present_on_PK: str
+
+class Notifications(BaseModel):
+    time: Optional[str]
+    uid: Optional[str]
