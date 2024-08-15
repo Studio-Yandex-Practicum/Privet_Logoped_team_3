@@ -6,7 +6,7 @@ from api.schemas import ContentOne
 from api.utils import async_http_get
 import bot_cfg
 from config import bot_env
-from constants import CONTENT_PATH
+from constants import CONTENT_PATH, ERROR_MESSAGE
 from routers.keyboard import HELP_MENU, MAIN_MENU, make_keyboard_menu, \
     PAYMENT_MENU
 from routers.states import States, TimeStates
@@ -78,9 +78,11 @@ class MainMenu:
     @staticmethod
     async def get_result():
         content = await MainMenu._get_content()
-        return {
-            'text': GET_RESULT + content.track_file
-        }
+        if content:
+            return {
+                'text': GET_RESULT + content.track_file
+            }
+        return {'text': ERROR_MESSAGE}
 
     @staticmethod
     async def get_app_help():
