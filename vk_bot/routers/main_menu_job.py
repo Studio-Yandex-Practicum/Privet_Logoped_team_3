@@ -6,6 +6,7 @@ from api.schemas import ContentOne
 from api.utils import async_http_get
 import bot_cfg
 from config import bot_env
+from constants import CONTENT_PATH
 from routers.keyboard import HELP_MENU, MAIN_MENU, make_keyboard_menu, \
     PAYMENT_MENU
 from routers.states import States, TimeStates
@@ -91,9 +92,11 @@ class MainMenu:
     @staticmethod
     async def _get_content():
         response = await async_http_get(
-            bot_env.url_api + 'content/'
+            # bot_env.url_api + 'content/'
+            bot_env.url_api + f'{CONTENT_PATH}'
         )
         if response['status'] == HTTPStatus.OK:
             contents = json.loads(response['text'])
             content = ContentOne.parse_obj(contents[0])
-        return content
+            return content
+        return None

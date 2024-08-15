@@ -1,5 +1,8 @@
 DB_PATH = 'sqlite:///sqlite.db'
 
+NOTIFICATION_PATH = 'notification/vk/?time='
+CONTENT_PATH = 'content/'
+
 LOOPWRAPPER_INTERVAL = 10
 
 USER_TOKEN_MAX_LEN = 15
