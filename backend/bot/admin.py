@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
-from .models import UserProfile, Notification, Content
+from .models import UserProfile, Notification, Content, Mailing
 
 # admin.site.unregister(User)
 admin.site.unregister(Group)
@@ -68,6 +68,13 @@ class ContentAdmin(admin.ModelAdmin):
         'usefull_url',
         'payment_url'
     )
+
+
+@admin.register(Mailing)
+class MailingAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date')
+    search_fields = ('title', 'description')
+    list_filter = ('date',)
 
 
 admin.site.register(UserProfile, UserProfileAdmin)

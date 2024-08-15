@@ -170,3 +170,18 @@ class Content(models.Model):
 
     def __str__(self):
         return f'{self.code_gift}'
+
+
+class Mailing(models.Model):
+    title = models.CharField('Название', max_length=50)
+    description = models.TextField('Описание')
+    date = models.DateField('Дата', default=timezone.now)
+    url = models.URLField('Ссылка', blank=True, null=True)  # Необязательное поле
+
+    class Meta:
+        verbose_name = 'Рассылка'
+        verbose_name_plural = 'Рассылки'
+        ordering = ('-date',)  # Сортировка по дате
+
+    def __str__(self):
+        return self.title

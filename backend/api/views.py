@@ -10,8 +10,9 @@ from api.serializers import (ContentSerializer, NotificationRetreiveSerializer,
                              NotificationSerializer,
                              UserProfileSerializer,
                              UserProfileUpdateSerializer,
-                             NotificationCreateByUIDSerializer)
-from bot.models import Content, Notification, UserProfile
+                             NotificationCreateByUIDSerializer,
+                             MailingSerializer)
+from bot.models import Content, Notification, UserProfile, Mailing
 
 
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
@@ -59,10 +60,65 @@ class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
 
 # class ContentViewSet(viewsets.ReadOnlyModelViewSet):
 class ContentViewSet(viewsets.ModelViewSet):
-    """(GET, LIST): Работа с профилем."""
-
+    """(GET, LIST): Работа с контентом."""
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
+
+    @action(detail=False, methods=['get'], url_path='by-code/(?P<code_gift>[^/.]+)')
+    def get_content_by_code(self, request, code_gift=None):
+        """Кастомный эндпоинт для получения контента по коду подарка."""
+        content = get_object_or_404(Content, code_gift=code_gift)
+        serializer = self.get_serializer(content)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(detail=False, methods=['get'], url_path='by-url-gift/(?P<url_gift>[^/.]+)')
+    def get_content_by_url_gift(self, request, url_gift=None):
+        """Кастомный эндпоинт для получения контента по URL подарка."""
+        content = get_object_or_404(Content, url_gift=url_gift)
+        serializer = self.get_serializer(content)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(detail=False, methods=['get'], url_path='by-usefull-url/(?P<usefull_url>[^/.]+)')
+    def get_content_by_usefull_url(self, request, usefull_url=None):
+        """Кастомный эндпоинт для получения контента по полезной ссылке."""
+        content = get_object_or_404(Content, usefull_url=usefull_url)
+        serializer = self.get_serializer(content)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(detail=False, methods=['get'], url_path='by-track-file/(?P<track_file>[^/.]+)')
+    def get_content_by_track_file(self, request, track_file=None):
+        """Кастомный эндпоинт для получения контента по файлу для отслеживания."""
+        content = get_object_or_404(Content, track_file=track_file)
+        serializer = self.get_serializer(content)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(detail=False, methods=['get'], url_path='by-payment-url/(?P<payment_url>[^/.]+)')
+    def get_content_by_payment_url(self, request, payment_url=None):
+        """Кастомный эндпоинт для получения контента по URL оплаты."""
+        content = get_object_or_404(Content, payment_url=payment_url)
+        serializer = self.get_serializer(content)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(detail=False, methods=['get'], url_path='by-ios-payment/(?P<ios_payment>[^/.]+)')
+    def get_content_by_ios_payment(self, request, ios_payment=None):
+        """Кастомный эндпоинт для получения контента по файлу оплаты для iOS."""
+        content = get_object_or_404(Content, ios_payment=ios_payment)
+        serializer = self.get_serializer(content)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(detail=False, methods=['get'], url_path='by-help-install-file/(?P<help_install_file>[^/.]+)')
+    def get_content_by_help_install_file(self, request, help_install_file=None):
+        """Кастомный эндпоинт для получения контента по файлу помощи по установке."""
+        content = get_object_or_404(Content, help_install_file=help_install_file)
+        serializer = self.get_serializer(content)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
+    @action(detail=False, methods=['get'], url_path='by-present-on-pk/(?P<present_on_pk>[^/.]+)')
+    def get_content_by_present_on_pk(self, request, present_on_pk=None):
+        """Кастомный эндпоинт для получения контента по файлу для ПК."""
+        content = get_object_or_404(Content, present_on_pk=present_on_pk)
+        serializer = self.get_serializer(content)
+        return Response(serializer.data, status=HTTPStatus.OK)
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
@@ -120,3 +176,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
         queryset = Notification.objects.filter(time=time, platform=platform)
         serializer = NotificationRetreiveSerializer(queryset, many=True)
         return Response(serializer.data, status=HTTPStatus.OK)
+
+
+class MailingViewSet(viewsets.ModelViewSet):
+    queryset = Mailing.objects.all()
+    serializer_class = MailingSerializer

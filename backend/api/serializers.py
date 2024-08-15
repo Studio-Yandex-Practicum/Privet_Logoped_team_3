@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from bot.models import Content, Notification, UserProfile
+from bot.models import Content, Notification, UserProfile, Mailing
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -59,3 +59,9 @@ class NotificationCreateByUIDSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ('user', 'platform', 'days_of_week', 'time')
+
+
+class MailingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mailing
+        fields = '__all__'
