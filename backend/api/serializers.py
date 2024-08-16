@@ -65,3 +65,38 @@ class MailingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mailing
         fields = '__all__'
+
+
+class ContentFileLinksSerializer(serializers.ModelSerializer):
+    url_gift = serializers.SerializerMethodField()
+    track_file = serializers.SerializerMethodField()
+    payment_url = serializers.SerializerMethodField()
+    ios_payment = serializers.SerializerMethodField()
+    help_install_file = serializers.SerializerMethodField()
+    present_on_pk = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Content
+        fields = (
+            'code_gift', 'url_gift', 'usefull_url', 'track_file',
+            'payment_url', 'ios_payment', 'help_install_file',
+            'present_on_pk'
+        )
+
+    def get_url_gift(self, obj):
+        return obj.url_gift.url if obj.url_gift else None
+
+    def get_track_file(self, obj):
+        return obj.track_file.url if obj.track_file else None
+
+    def get_payment_url(self, obj):
+        return obj.payment_url.url if obj.payment_url else None
+
+    def get_ios_payment(self, obj):
+        return obj.ios_payment.url if obj.ios_payment else None
+
+    def get_help_install_file(self, obj):
+        return obj.help_install_file.url if obj.help_install_file else None
+
+    def get_present_on_pk(self, obj):
+        return obj.present_on_pk.url if obj.present_on_pk else None

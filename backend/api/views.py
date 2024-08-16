@@ -1,17 +1,19 @@
 import re
 from http import HTTPStatus
 
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from api.serializers import (ContentSerializer, NotificationRetreiveSerializer,
+from api.serializers import (NotificationRetreiveSerializer,
                              NotificationSerializer,
                              UserProfileSerializer,
                              UserProfileUpdateSerializer,
                              NotificationCreateByUIDSerializer,
-                             MailingSerializer)
+                             MailingSerializer,
+                             ContentFileLinksSerializer)
 from bot.models import Content, Notification, UserProfile, Mailing
 
 
@@ -62,60 +64,68 @@ class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
 class ContentViewSet(viewsets.ModelViewSet):
     """(GET, LIST): Работа с контентом."""
     queryset = Content.objects.all()
-    serializer_class = ContentSerializer
+    serializer_class = ContentFileLinksSerializer
 
-    @action(detail=False, methods=['get'], url_path='by-code/(?P<code_gift>[^/.]+)')
-    def get_content_by_code(self, request, code_gift=None):
+    @action(detail=False, methods=['get'], url_path='by-code')
+    def get_content_by_code(self, request):
         """Кастомный эндпоинт для получения контента по коду подарка."""
+        code_gift = request.query_params.get('code_gift')
         content = get_object_or_404(Content, code_gift=code_gift)
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
-    @action(detail=False, methods=['get'], url_path='by-url-gift/(?P<url_gift>[^/.]+)')
-    def get_content_by_url_gift(self, request, url_gift=None):
+    @action(detail=False, methods=['get'], url_path='by-url-gift')
+    def get_content_by_url_gift(self, request):
         """Кастомный эндпоинт для получения контента по URL подарка."""
+        url_gift = request.query_params.get('url_gift')
         content = get_object_or_404(Content, url_gift=url_gift)
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
-    @action(detail=False, methods=['get'], url_path='by-usefull-url/(?P<usefull_url>[^/.]+)')
-    def get_content_by_usefull_url(self, request, usefull_url=None):
+    @action(detail=False, methods=['get'], url_path='by-usefull-url')
+    def get_content_by_usefull_url(self, request):
         """Кастомный эндпоинт для получения контента по полезной ссылке."""
+        usefull_url = request.query_params.get('usefull_url')
         content = get_object_or_404(Content, usefull_url=usefull_url)
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
-    @action(detail=False, methods=['get'], url_path='by-track-file/(?P<track_file>[^/.]+)')
-    def get_content_by_track_file(self, request, track_file=None):
+    @action(detail=False, methods=['get'], url_path='by-track-file')
+    def get_content_by_track_file(self, request):
         """Кастомный эндпоинт для получения контента по файлу для отслеживания."""
+        track_file = request.query_params.get('track_file')
         content = get_object_or_404(Content, track_file=track_file)
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
-    @action(detail=False, methods=['get'], url_path='by-payment-url/(?P<payment_url>[^/.]+)')
-    def get_content_by_payment_url(self, request, payment_url=None):
+    @action(detail=False, methods=['get'], url_path='by-payment-url')
+    def get_content_by_payment_url(self, request):
         """Кастомный эндпоинт для получения контента по URL оплаты."""
+        payment_url = request.query_params.get('payment_url')
         content = get_object_or_404(Content, payment_url=payment_url)
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
-    @action(detail=False, methods=['get'], url_path='by-ios-payment/(?P<ios_payment>[^/.]+)')
-    def get_content_by_ios_payment(self, request, ios_payment=None):
+    @action(detail=False, methods=['get'], url_path='by-ios-payment')
+    def get_content_by_ios_payment(self, request):
         """Кастомный эндпоинт для получения контента по файлу оплаты для iOS."""
+        ios_payment = request.query_params.get('ios_payment')
         content = get_object_or_404(Content, ios_payment=ios_payment)
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
-    @action(detail=False, methods=['get'], url_path='by-help-install-file/(?P<help_install_file>[^/.]+)')
-    def get_content_by_help_install_file(self, request, help_install_file=None):
+    @action(detail=False, methods=['get'], url_path='by-help-install-file')
+    def get_content_by_help_install_file(self, request):
         """Кастомный эндпоинт для получения контента по файлу помощи по установке."""
+        help_install_file = request.query_params.get('help_install_file')
         content = get_object_or_404(Content, help_install_file=help_install_file)
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
-    @action(detail=False, methods=['get'], url_path='by-present-on-pk/(?P<present_on_pk>[^/.]+)')
-    def get_content_by_present_on_pk(self, request, present_on_pk=None):
+    @action(detail=False, methods=['get'], url_path='by-present-on-pk')
+    def get_content_by_present_on_pk(self, request):
         """Кастомный эндпоинт для получения контента по файлу для ПК."""
+        present_on_pk = request.query_params.get('present_on_pk')
         content = get_object_or_404(Content, present_on_pk=present_on_pk)
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
@@ -141,30 +151,26 @@ class NotificationViewSet(viewsets.ModelViewSet):
         url_path='uid/(?P<user_id>[^/.]+)'
     )
     def notification_retreive(self, request, user_id):
-        """Создание напоминания по UID."""
+        """Получение уведомлений по UID."""
         user_profile = get_object_or_404(UserProfile, user_id=user_id)
         queryset = Notification.objects.filter(user_id=user_profile)
-        # serializer = self.get_serializer(data=request.data)
-        serializer = self.get_serializer(queryset, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = NotificationRetreiveSerializer(queryset, many=True)
         return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(
         methods=['get'],
         detail=False,
         url_path='(vk|tg)'
-        # url_path='vk'
     )
     def notification_retreive_by_time(self, request, platform):
-        """Создание напоминания по UID."""
-        print(platform)
-        if 'time' not in request.query_params:
+        """Получение уведомлений по текущему времени и платформе."""
+        time = request.query_params.get('time', None)
+
+        if not time:
             return Response(
                 {"error": "Параметр 'time' обязателен"},
                 status=HTTPStatus.BAD_REQUEST
             )
-        time = request.query_params.get('time', None)
 
         # Проверка формата времени
         if not re.match(r'^(?:[01]\d|2[0-3]):[0-5]\d$', time):
@@ -173,8 +179,18 @@ class NotificationViewSet(viewsets.ModelViewSet):
                 status=HTTPStatus.BAD_REQUEST
             )
 
-        queryset = Notification.objects.filter(time=time, platform=platform)
-        serializer = NotificationRetreiveSerializer(queryset, many=True)
+        # Рассчитываем фактическое время отправки с учетом разницы в часовых поясах
+        queryset = Notification.objects.filter(
+            platform=platform,
+            time__lte=time
+        )
+        # Фильтруем только те уведомления, которые подходят под текущее время и платформу
+        filtered_queryset = [
+            notification for notification in queryset
+            if (timezone.now().time() - notification.diff_to_msk).strftime('%H:%M') == time
+        ]
+
+        serializer = NotificationRetreiveSerializer(filtered_queryset, many=True)
         return Response(serializer.data, status=HTTPStatus.OK)
 
 

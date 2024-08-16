@@ -93,6 +93,11 @@ class Notification(models.Model):
         default=0
     )
 
+    def get_actual_send_time(self):
+        """Возвращает фактическое время отправки с учетом разницы во времени."""
+        actual_time = (timezone.now().time() - timezone.timedelta(hours=self.diff_to_msk)).strftime('%H:%M')
+        return actual_time
+
     class Meta:
         verbose_name = 'Напоминания'
         verbose_name_plural = 'Напоминание'
