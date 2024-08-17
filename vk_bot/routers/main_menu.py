@@ -7,29 +7,20 @@ import bot_cfg
 from api.api import Roles
 from constants import (COMMAND_PREFIXES, GREETING_MESSAGE, ROLE_MESSAGE,
                        START_MENU_CMD, MAIN_MENU_CMD, INVITE_MESSAGE)
-from routers.help_menu_job import HelpMenu
+from job.help_menu_job import HelpMenu
 from routers.keyboard import (
     HELP_MENU, MAIN_MENU, MAIN_MENU_COMMAND, make_keyboard_menu,
     PAYMENT_MENU, ROLE_MENU,
 )
-from routers.main_menu_job import MainMenu
-from routers.payment_job import PaymentMenu
-from routers.secret_word_job import SecretWord
+from job.main_menu_job import MainMenu
+from job.payment_job import PaymentMenu
+from job.secret_word_job import SecretWord
 from routers.states import States, TimeStates
 from routers.time_notification import TimeNotification
 
 log = logging.getLogger(__name__)
 
 bl = BotLabeler()
-
-# @bot.on.chat_message(
-#     (
-#         rules.ChatActionRule("chat_invite_user"),
-#         rules.ChatActionRule("chat_invite_user_by_link")
-#     )
-# )
-# async def user_joined(message: Message) -> None:
-#     await message.answer("Приветствуем в нашем чате")
 
 
 @bl.private_message(CommandRule(START_MENU_CMD, COMMAND_PREFIXES, 0))

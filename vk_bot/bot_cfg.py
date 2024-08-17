@@ -5,7 +5,7 @@ from vkbottle import Bot
 from config import bot_env
 from constants import LOOPWRAPPER_INTERVAL
 from routers import labelers
-from routers.notification_job import periodicaly_notification_job
+from job.notification_job import periodicaly_notification_job
 
 bot = Bot(token=bot_env.group_token)
 
@@ -29,6 +29,7 @@ class Notification:
 
     def get_time_to_notify(self):
         return self.last_notification
+
     def make_notification(self):
         current_time = self.current_time()
         if self.last_notification != current_time:

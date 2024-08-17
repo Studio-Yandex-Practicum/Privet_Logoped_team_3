@@ -1,6 +1,6 @@
 import logging
 
-from vkbottle.bot import BotLabeler, Message
+from vkbottle.bot import BotLabeler
 
 log = logging.getLogger(__name__)
 

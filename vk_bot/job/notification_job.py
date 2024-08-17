@@ -1,12 +1,7 @@
-import json
 import logging
-from http import HTTPStatus
 
 import bot_cfg
-from api.schemas import Notifications, Notification
-from api.utils import async_http_get
-from config import bot_env
-from constants import NOTIFICATION_PATH
+from api.api_notification import NotificationApi
 
 log = logging.getLogger(__name__)
 
@@ -17,7 +12,7 @@ async def periodicaly_notification_job():
 
     log.info('Periodicaly notification job at: %s', bot_cfg.notification.get_time_to_notify())
     print(f'periodicaly_notification_job at {bot_cfg.notification.get_time_to_notify()}')
-    contents = await UserNotification._get_content(
+    contents = await NotificationApi.get_notification_by_time(
         bot_cfg.notification.get_time_to_notify()
     )
     if not contents:
@@ -39,20 +34,3 @@ async def periodicaly_notification_job():
         random_id=0,
         message='Event Message'
     )
-
-
-class UserNotification:
-
-    @staticmethod
-    async def _get_content(time):
-        # print(time)
-        time = '11:40'
-        response = await async_http_get(
-            bot_env.url_api + f'{NOTIFICATION_PATH}{time}'
-        )
-        if response['status'] == HTTPStatus.OK:
-            response_json = json.loads(response['text'])
-            contents = Notifications(notifications=[Notification(**item) for item in response_json])
-        else:
-            contents = None
-        return contents

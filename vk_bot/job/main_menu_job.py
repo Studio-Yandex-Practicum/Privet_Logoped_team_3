@@ -1,12 +1,8 @@
-import json
 import logging
-from http import HTTPStatus
 
-from api.schemas import ContentOne
-from api.utils import async_http_get
 import bot_cfg
-from config import bot_env
-from constants import CONTENT_PATH, ERROR_MESSAGE
+from api.api_content import ContentApi
+from constants import ERROR_MESSAGE
 from routers.keyboard import HELP_MENU, MAIN_MENU, make_keyboard_menu, \
     PAYMENT_MENU
 from routers.states import States, TimeStates
@@ -41,7 +37,11 @@ class MainMenu:
 
     @staticmethod
     async def get_video():
-        content = await MainMenu._get_content()
+        # content = await MainMenu._get_content()
+        content = await ContentApi.get_video()
+        if not content:
+            log.error("Content not found for get_video")
+            return {'text': ERROR_MESSAGE}
         return {
             'text': GET_VIDEO + content.url_gift
         }
@@ -77,12 +77,14 @@ class MainMenu:
 
     @staticmethod
     async def get_result():
-        content = await MainMenu._get_content()
-        if content:
-            return {
-                'text': GET_RESULT + content.track_file
-            }
-        return {'text': ERROR_MESSAGE}
+        # content = await MainMenu._get_content()
+        content = await ContentApi.get_result()
+        if not content:
+            log.error("Content not found for get_result")
+            return {'text': ERROR_MESSAGE}
+        return {
+            'text': GET_RESULT + content.track_file
+        }
 
     @staticmethod
     async def get_app_help():
@@ -90,15 +92,3 @@ class MainMenu:
             'text': GET_HELP,
             'keyboard': make_keyboard_menu(HELP_MENU)
         }
-
-    @staticmethod
-    async def _get_content():
-        response = await async_http_get(
-            # bot_env.url_api + 'content/'
-            bot_env.url_api + f'{CONTENT_PATH}'
-        )
-        if response['status'] == HTTPStatus.OK:
-            contents = json.loads(response['text'])
-            content = ContentOne.parse_obj(contents[0])
-            return content
-        return None
