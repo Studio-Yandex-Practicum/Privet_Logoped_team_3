@@ -32,6 +32,7 @@ async def role_logoped(message: Message):
             json=data,
         )
 
+
 @router.message(F.text == lexicon.buttons.parent)
 async def role_parent(message: Message):
     data = {
@@ -50,6 +51,7 @@ async def role_parent(message: Message):
             json=data,
         )
 
+
 @router.message(F.text == lexicon.buttons.usefull_video)
 async def take_usefull_video(message: Message):
     async with aiohttp.ClientSession() as session:
@@ -58,7 +60,10 @@ async def take_usefull_video(message: Message):
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                await message.answer(f'{data}')
+                if data.get('usefull_url'):
+                    await message.answer(data.get('usefull_url'))
+                else:
+                    await message.answer('Ссылка еще готовится :(')
             else:
                 await message.answer('Ссылка еще готовится :(')
 
@@ -71,7 +76,10 @@ async def take_track_results(message: Message):
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                await message.answer(f'{data}')
+                if data.get('track_file'):
+                    await message.answer(data.get('track_file'))
+                else:
+                    await message.answer('Ссылка еще готовится :(')
             else:
                 await message.answer('Ссылка еще готовится :(')
 

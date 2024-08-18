@@ -57,56 +57,56 @@ class ContentViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='by-code')
     def get_content_by_code(self, request):
         """Кастомный эндпоинт для получения контента по коду подарка."""
-        content = get_object_or_404(Content)
+        content = Content.objects.latest('date_created')
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(detail=False, methods=['get'], url_path='by-url-gift')
     def get_content_by_url_gift(self, request):
         """Кастомный эндпоинт для получения контента по URL подарка."""
-        content = get_object_or_404(Content)
+        content = Content.objects.latest('date_created')
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(detail=False, methods=['get'], url_path='by-usefull-url')
     def get_content_by_usefull_url(self, request):
         """Кастомный эндпоинт для получения контента по полезной ссылке."""
-        content = get_object_or_404(Content)
+        content = Content.objects.latest('date_created')
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(detail=False, methods=['get'], url_path='by-track-file')
     def get_content_by_track_file(self, request):
         """Кастомный эндпоинт для получения контента по файлу для отслеживания."""
-        content = get_object_or_404(Content)
+        content = Content.objects.latest('date_created')
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(detail=False, methods=['get'], url_path='by-payment-url')
     def get_content_by_payment_url(self, request):
         """Кастомный эндпоинт для получения контента по URL оплаты."""
-        content = get_object_or_404(Content)
+        content = Content.objects.latest('date_created')
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(detail=False, methods=['get'], url_path='by-ios-payment')
     def get_content_by_ios_payment(self, request):
         """Кастомный эндпоинт для получения контента по файлу оплаты для iOS."""
-        content = get_object_or_404(Content)
+        content = Content.objects.latest('date_created')
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(detail=False, methods=['get'], url_path='by-help-install-file')
     def get_content_by_help_install_file(self, request):
         """Кастомный эндпоинт для получения контента по файлу помощи по установке."""
-        content = get_object_or_404(Content)
+        content = Content.objects.latest('date_created')
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(detail=False, methods=['get'], url_path='by-present-on-pk')
     def get_content_by_present_on_pk(self, request):
         """Кастомный эндпоинт для получения контента по файлу для ПК."""
-        content = get_object_or_404(Content)
+        content = Content.objects.latest('date_created')
         serializer = self.get_serializer(content)
         return Response(serializer.data, status=HTTPStatus.OK)
 

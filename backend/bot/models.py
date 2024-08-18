@@ -132,29 +132,21 @@ class Content(models.Model):
         verbose_name="Полезная ссылка"
     )
     track_file = models.URLField(
-        # Поле для загрузки файла для отслеживания
-        upload_to='content/',
         verbose_name="Файл для отслеживания"
     )
     payment_url = models.URLField(
-        # Поле для хранения URL для оплаты
+        # Поле для хранения URL оплаты
         verbose_name="URL оплаты",
         blank=True,  # ЗДЕСЬ ИСПРАВИЛА (для миграций)
         null=True
     )
     ios_payment = models.URLField(
-        # Поле для загрузки файла оплаты для iOS
-        upload_to='content/',
         verbose_name="Файл оплаты для iOS"
     )
     help_install_file = models.URLField(
-        # Поле для загрузки файла помощи по установке
-        upload_to='content/',
         verbose_name="Файл помощи по установке"
     )
     present_on_pk = models.URLField(
-        # Поле для загрузки файла для ПК
-        upload_to='content/',
         verbose_name="Файл для ПК",
         blank=True,  # ЗДЕСЬ ИСПРАВИЛА (для миграций)
         null=True
