@@ -136,3 +136,6 @@ dmypy.json
 db.sqlite3.*
 /sqlite.db
 /read.me
+
+# dev-tools
+pyproject.toml
