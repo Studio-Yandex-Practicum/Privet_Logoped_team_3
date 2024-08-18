@@ -32,7 +32,6 @@ async def role_logoped(message: Message):
             json=data,
         )
 
-
 @router.message(F.text == lexicon.buttons.parent)
 async def role_parent(message: Message):
     data = {
@@ -51,15 +50,30 @@ async def role_parent(message: Message):
             json=data,
         )
 
-
 @router.message(F.text == lexicon.buttons.usefull_video)
 async def take_usefull_video(message: Message):
-    await message.answer('Тут будет ссылка на полезное видео')
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f'{bot_env.host}/api/v1/content/by-usefull-url/'
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                await message.answer(f'{data}')
+            else:
+                await message.answer('Ссылка еще готовится :(')
 
 
 @router.message(F.text == lexicon.buttons.track_results)
 async def take_track_results(message: Message):
-    await message.answer('Тут будет файл бланка')
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f'{bot_env.host}/api/v1/content/by-track-file/'
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                await message.answer(f'{data}')
+            else:
+                await message.answer('Ссылка еще готовится :(')
 
 
 @router.message(F.text == lexicon.buttons.payment)
@@ -83,6 +97,15 @@ async def take_gift(message: Message, state: FSMContext):
 
 @router.message(StateFilter(FSMGift.input_promocode))
 async def take_promocode(message: Message, state: FSMContext):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f'{bot_env.host}/api/v1/content/by-code/'
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                await message.answer(f'{data}')
+            else:
+                await message.answer('Ссылка еще готовится :(')
     await message.answer(f'Промокод: {message.text}')
     await state.set_state(default_state)
 
