@@ -4,6 +4,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from lexicon import lexicon
 
+
 main_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
@@ -64,6 +65,39 @@ back_to_main_menu_kb = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(
                 text=lexicon.buttons.back, callback_data='main_menu'
+            )
+        ]
+    ]
+)
+
+
+help_menu_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.install_help, callback_data='install_help'
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.output_pc, callback_data='output_pc'
+            )
+        ]
+    ]
+)
+
+payment_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.pay_full_version,
+                callback_data='pay_full_version',
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.pay_ios_version,
+                callback_data='pay_ios_version',
             )
         ]
     ]
