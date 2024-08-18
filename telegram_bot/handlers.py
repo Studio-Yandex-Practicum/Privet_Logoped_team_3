@@ -32,6 +32,7 @@ async def role_logoped(message: Message):
             json=data,
         )
 
+
 @router.message(F.text == lexicon.buttons.parent)
 async def role_parent(message: Message):
     data = {
@@ -49,6 +50,7 @@ async def role_parent(message: Message):
             f'{bot_env.host}/api/v1/profile/uid/',
             json=data,
         )
+
 
 @router.message(F.text == lexicon.buttons.usefull_video)
 async def take_usefull_video(message: Message):
@@ -78,7 +80,10 @@ async def take_track_results(message: Message):
 
 @router.message(F.text == lexicon.buttons.payment)
 async def help_with_payment(message: Message):
-    await message.answer('Тут будет помощь с оплатой')
+    await message.answer(
+        text=lexicon.messages.payment_menu,
+        reply_markup=keyboards.payment_kb,
+    )
 
 
 @router.message(F.text == lexicon.buttons.notifications)
@@ -112,7 +117,10 @@ async def take_promocode(message: Message, state: FSMContext):
 
 @router.message(F.text == lexicon.buttons.help)
 async def take_help(message: Message):
-    await message.answer('Какая-то помощь с приложением')
+    await message.answer(
+        text=lexicon.messages.help_menu,
+        reply_markup=keyboards.help_menu_kb
+    )
 
 
 @router.message(F.text == lexicon.buttons.contact_logoped)
