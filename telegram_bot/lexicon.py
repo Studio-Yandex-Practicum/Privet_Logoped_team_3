@@ -13,6 +13,12 @@ class Buttons(NamedTuple):
     # Role menu
     parent: str = 'Родитель'
     logoped: str = 'Логопед'
+    # Payment menu
+    pay_full_version: str = 'Оплатить полную версию'
+    pay_ios_version: str = 'Как купить на iOS'
+    # Help menu
+    install_help: str = 'Помощь в установке'
+    output_pc: str = 'Вывод на ПК'
     # Confirmation contact menu
     yes: str = 'Да'
     no: str = 'Нет'
@@ -34,6 +40,8 @@ class Messages(NamedTuple):
     role_logoped: str = 'Вы вошли как логопед.\nВот с чем я могу Вам помочь:'
     role_parent: str = 'Вы вошли как родитель.\nВот с чем я могу Вам помочь:'
     confirmation_contact: str = 'Связаться с логопедом?'
+    help_menu: str = 'Меню оплаты:'
+    payment_menu: str = 'Вот чем я могу Вам помочь:'
     # Promocode menu
     input_promocode: str = 'Вы можете ввести промокод:'
 
