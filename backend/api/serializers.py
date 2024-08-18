@@ -84,19 +84,19 @@ class ContentFileLinksSerializer(serializers.ModelSerializer):
         )
 
     def get_url_gift(self, obj):
-        return obj.url_gift.url if obj.url_gift else None
+        return obj.url_gift if obj.url_gift else None
 
     def get_track_file(self, obj):
-        return obj.track_file.url if obj.track_file else None
+        return obj.track_file if obj.track_file else None
 
     def get_payment_url(self, obj):
-        return obj.payment_url.url if obj.payment_url else None
+        return obj.payment_url if obj.payment_url else None
 
     def get_ios_payment(self, obj):
-        return obj.ios_payment.url if obj.ios_payment else None
+        return obj.ios_payment if obj.ios_payment else None
 
     def get_help_install_file(self, obj):
-        return obj.help_install_file.url if obj.help_install_file else None
+        return obj.help_install_file if obj.help_install_file else None
 
     def get_present_on_pk(self, obj):
-        return obj.present_on_pk.url if obj.present_on_pk else None
+        return obj.present_on_pk if obj.present_on_pk else None
