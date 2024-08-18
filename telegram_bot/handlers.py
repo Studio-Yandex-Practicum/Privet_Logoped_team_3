@@ -16,6 +16,7 @@ router = Router()
 
 @router.message(F.text == lexicon.buttons.logoped)
 async def role_logoped(message: Message):
+    """Выбор роли логопеда"""
     data = {
         'username': message.from_user.username,
         'user_id': message.from_user.id,
@@ -35,6 +36,7 @@ async def role_logoped(message: Message):
 
 @router.message(F.text == lexicon.buttons.parent)
 async def role_parent(message: Message):
+    """Выбор роли родителя"""
     data = {
         'username': message.from_user.username,
         'user_id': message.from_user.id,
@@ -54,6 +56,7 @@ async def role_parent(message: Message):
 
 @router.message(F.text == lexicon.buttons.usefull_video)
 async def take_usefull_video(message: Message):
+    """Полезное видео"""
     async with aiohttp.ClientSession() as session:
         async with session.get(
             f'{bot_env.host}/api/v1/content/by-usefull-url/'
@@ -67,6 +70,7 @@ async def take_usefull_video(message: Message):
 
 @router.message(F.text == lexicon.buttons.track_results)
 async def take_track_results(message: Message):
+    """Отследить результат"""
     async with aiohttp.ClientSession() as session:
         async with session.get(
             f'{bot_env.host}/api/v1/content/by-track-file/'
@@ -80,6 +84,7 @@ async def take_track_results(message: Message):
 
 @router.message(F.text == lexicon.buttons.payment)
 async def help_with_payment(message: Message):
+    """Переход в меню оплаты"""
     await message.answer(
         text=lexicon.messages.payment_menu,
         reply_markup=keyboards.payment_kb,
@@ -88,11 +93,13 @@ async def help_with_payment(message: Message):
 
 @router.message(F.text == lexicon.buttons.notifications)
 async def set_notifications(message: Message):
+    """Настройка уведомлений"""
     await message.answer('Как я понимаю настройки уведомлений')
 
 
 @router.message(F.text == lexicon.buttons.gift)
 async def take_gift(message: Message, state: FSMContext):
+    """Меню промокода"""
     await message.answer(
         text=lexicon.messages.input_promocode,
         reply_markup=keyboards.back_to_main_menu_kb,
@@ -102,6 +109,7 @@ async def take_gift(message: Message, state: FSMContext):
 
 @router.message(StateFilter(FSMGift.input_promocode))
 async def take_promocode(message: Message, state: FSMContext):
+    """Выдача подарка по промокоду"""
     async with aiohttp.ClientSession() as session:
         async with session.get(
             f'{bot_env.host}/api/v1/content/by-code/'
@@ -111,12 +119,12 @@ async def take_promocode(message: Message, state: FSMContext):
                 await message.answer(f'{data}')
             else:
                 await message.answer('Ссылка еще готовится :(')
-    await message.answer(f'Промокод: {message.text}')
     await state.set_state(default_state)
 
 
 @router.message(F.text == lexicon.buttons.help)
 async def take_help(message: Message):
+    """Переход в меню помощи"""
     await message.answer(
         text=lexicon.messages.help_menu,
         reply_markup=keyboards.help_menu_kb
@@ -125,6 +133,7 @@ async def take_help(message: Message):
 
 @router.message(F.text == lexicon.buttons.contact_logoped)
 async def confirmation_contact(message: Message):
+    """Меню подтверждения контакта"""
     await message.answer(
         text=lexicon.messages.confirmation_contact,
         reply_markup=keyboards.confirmation_contact_kb,
@@ -133,6 +142,7 @@ async def confirmation_contact(message: Message):
 
 @router.callback_query(F.data == 'main_menu')
 async def callback_main_menu(callback: CallbackQuery):
+    """Главное меню после выбора на inline-клавиатуре"""
     await callback.answer()
     await callback.message.delete()
     await callback.message.answer(
