@@ -2,7 +2,6 @@ from datetime import datetime
 
 from django.db import models
 
-from users.models import User
 
 PLATFORMS = [
     ('vk', 'Vk'),
@@ -29,14 +28,13 @@ class UserProfile(models.Model):
             models.Index(fields=['user_id']),
         ]
 
-
     def __str__(self):
         return f'{self.user_id} {self.username} {self.platform} {self.role}'
 
 
 class Notification(models.Model):
     user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    platform = models.CharField('platform ',max_length=50, choices=PLATFORMS)
+    platform = models.CharField('platform ', max_length=50, choices=PLATFORMS)
     days_of_week = models.CharField('Дни недели', max_length=50)
     time = models.TimeField(auto_now=False, auto_now_add=False)
 
