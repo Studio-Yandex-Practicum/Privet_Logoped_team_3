@@ -56,13 +56,19 @@ async def sub_role_menu(message: Message):
 @bl.private_message(CommandRule(GREETING_MESSAGE, COMMAND_PREFIXES, 0))
 async def main_menu(message: Message):
     """Главное меню."""
-    print("Главное меню.")
     log.info('Received command: %s in %s', GREETING_MESSAGE, message.text)
-    print(message)
-    await message.answer(
-        GREETING_MESSAGE,
-        keyboard=make_keyboard_menu(MAIN_MENU)
+    if not Roles.check_user_registered(message.peer_id):
+        log.info('Role not found')
+        print("Выбор роли Родитель/Логопед")
+        await message.answer(
+            ROLE_MESSAGE,
+            keyboard=make_keyboard_menu(ROLE_MENU)
         )
+    else:
+        await message.answer(
+            GREETING_MESSAGE,
+            keyboard=make_keyboard_menu(MAIN_MENU)
+            )
 
 
 @bl.private_message(text=MAIN_MENU)
@@ -80,11 +86,19 @@ async def sub_role_menu(message: Message):
 @bl.private_message(text=(MAIN_MENU_COMMAND,MAIN_MENU_CMD))
 async def show_main_menu(message: Message):
     """Переключение в главное меню."""
-    log.info('Received switch to main menu command: %s', message.text)
-    await message.answer(
-        MAIN_MENU_COMMAND,
-        keyboard=make_keyboard_menu(MAIN_MENU)
-    )
+    if not await Roles.check_user_registered(message.peer_id):
+        log.info('Role not found')
+        print("Выбор роли Родитель/Логопед")
+        await message.answer(
+            ROLE_MESSAGE,
+            keyboard=make_keyboard_menu(ROLE_MENU)
+        )
+    else:
+        log.info('Received switch to main menu command: %s', message.text)
+        await message.answer(
+            MAIN_MENU_COMMAND,
+            keyboard=make_keyboard_menu(MAIN_MENU)
+        )
 
 
 @bl.private_message(text=HELP_MENU)

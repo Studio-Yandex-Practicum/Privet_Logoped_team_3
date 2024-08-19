@@ -13,23 +13,37 @@ log = logging.getLogger(__name__)
 class Roles:
 
     @staticmethod
+    async def check_user_registered(user_id):
+        user = await Roles._get_id(str(user_id))
+        if user and user['status'] == HTTPStatus.OK:
+            return True
+        return False
+
+
+    @staticmethod
     async def _get_id(user_id):
-        response = await async_http_get(
-            bot_env.url_api + 'profile/uid/' + user_id + '/'
-        )
-        print(response)
-        log.info('Response: %s', response)
-        return response
+        try:
+            response = await async_http_get(
+                bot_env.url_api + 'profile/uid/' + user_id + '/'
+            )
+            print(response)
+            log.info('Response: %s', response)
+            return response
+        except Exception as e:
+            return None
 
     @staticmethod
     async def _post_id_with_role(user_id, role, username):
-        response = await async_http_post(
-            bot_env.url_api + 'profile/uid/',
-            data=Roles.fill_user_data(user_id, role, username)
-        )
-        print(response)
-        log.info('Response: %s', response)
-        return response
+        try:
+            response = await async_http_post(
+                bot_env.url_api + 'profile/uid/',
+                data=Roles.fill_user_data(user_id, role, username)
+            )
+            print(response)
+            log.info('Response: %s', response)
+            return response
+        except Exception as e:
+            return None
 
     @staticmethod
     async def send_role_for_id(user_id, role, username):
