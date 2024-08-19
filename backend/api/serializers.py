@@ -1,6 +1,9 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from bot.models import Content, Notification, UserProfile
+
+RECORD_EXISTS = 'Запись с такими параметрами уже существует.'
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -44,10 +47,12 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 class NotificationRetreiveSerializer(serializers.ModelSerializer):
+    uid = serializers.CharField(source='user_id.user_id',
+                                            read_only=True)
 
     class Meta:
         model = Notification
-        fields = ('user_id', 'platform', 'time')
+        fields = ('user_id', 'uid', 'platform', 'time')
 
 
 class NotificationCreateByUIDSerializer(serializers.ModelSerializer):
@@ -59,3 +64,21 @@ class NotificationCreateByUIDSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ('user', 'platform', 'days_of_week', 'time')
+
+    def create(self, validated_data):
+        user_profile = validated_data.pop('user')
+        notification = Notification.objects.create(user_id=user_profile, **validated_data)
+        return notification
+
+    def to_representation(self, value):
+        return NotificationRetreiveSerializer(value).data
+
+    def validate(self, attrs):
+        if Notification.objects.filter(
+            user_id=attrs['user'],
+            platform=attrs['platform'],
+            days_of_week=attrs['days_of_week'],
+            time=attrs['time']
+        ).exists():
+            raise serializers.ValidationError(RECORD_EXISTS)
+        return attrs

@@ -33,7 +33,19 @@ PAYMENT_MENU = (
 
 def make_keyboard_menu(menu_items):
     buttons = [
-        Text(item) for item in menu_items
+        Text(item) for item in MAIN_MENU
+    ]
+
+    return make_keyboard(
+        buttons,
+        buttons_per_line=BUTTONS_PER_LINE,
+        inline=True
+    )
+
+
+def start_keyboard():
+    buttons = [
+        Text(item) for item in ROLE_MENU
     ]
 
     return make_keyboard(

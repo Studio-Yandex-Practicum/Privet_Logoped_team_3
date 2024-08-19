@@ -6,8 +6,10 @@ from api.schemas import UserProfile
 from api.utils import (
     async_http_get,
     async_http_post,
-    async_http_put
+    async_http_put,
+    async_http_patch
 )
+
 from config import bot_env
 
 log = logging.getLogger(__name__)

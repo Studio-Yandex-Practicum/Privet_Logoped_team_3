@@ -1,12 +1,14 @@
 import logging
 
+import bot_cfg
+
 from vkbottle.bot import BotLabeler, Message
 from vkbottle.dispatch.rules.base import CommandRule
+from constants import (
+    GREETING_MESSAGE, COMMAND_PREFIXES, ROLE_MESSAGE, START_MENU_CMD
+)
 
-import bot_cfg
 from api.api import Roles
-from constants import (COMMAND_PREFIXES, GREETING_MESSAGE, ROLE_MESSAGE,
-                       START_MENU_CMD)
 from routers.help_menu_job import HelpMenu
 from routers.keyboard import (
     HELP_MENU, MAIN_MENU, MAIN_MENU_COMMAND, make_keyboard_menu,
@@ -17,6 +19,7 @@ from routers.payment_job import PaymentMenu
 from routers.secret_word_job import SecretWord
 from routers.states import States, TimeStates
 from routers.time_notification import TimeNotification
+
 
 log = logging.getLogger(__name__)
 
@@ -30,7 +33,7 @@ async def role_menu(message: Message):
     print("Вабор роли Родитель/Логопед")
     await message.answer(
         ROLE_MESSAGE,
-        keyboard=make_keyboard_menu(ROLE_MENU)
+        keyboard=start_keyboard()
     )
 
 
@@ -49,7 +52,7 @@ async def sub_role_menu(message: Message):
 
     await message.answer(
         GREETING_MESSAGE,
-        keyboard=make_keyboard_menu(MAIN_MENU)
+        keyboard=main_keyboard()
     )
 
 
@@ -61,7 +64,7 @@ async def main_menu(message: Message):
     print(message)
     await message.answer(
         GREETING_MESSAGE,
-        keyboard=make_keyboard_menu(MAIN_MENU)
+        keyboard=main_keyboard()
         )
 
 
@@ -70,7 +73,10 @@ async def sub_role_menu(message: Message):
     """Установка роли для id Родитель/Логопед"""
     log.info('Main menu command: %s', message.text)
     print(message.from_id)
-    # if message.text not in ('Уведомления', 'Подарок',):
+
+    if message.text not in ('Уведомления','Подарок',):
+        response_message = await MainMenu.response(message.text)
+        await message.answer(response_message)
     response_message = await MainMenu.response(message.text, message)
     await message.answer(
         response_message['text'],

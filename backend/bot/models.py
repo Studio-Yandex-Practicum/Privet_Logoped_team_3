@@ -55,42 +55,12 @@ class UserProfile(AbstractUser):
 
 
 class Notification(models.Model):
-    DAYS_OF_WEEK_CHOICES = [
-        ('monday', 'Понедельник'),
-        ('tuesday', 'Вторник'),
-        ('wednesday', 'Среда'),
-        ('thursday', 'Четверг'),
-        ('friday', 'Пятница'),
-        ('saturday', 'Суббота'),
-        ('sunday', 'Воскресенье'),
-    ]
+    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    platform = models.CharField('platform ',max_length=50, choices=PLATFORMS)
+    days_of_week = models.CharField('Дни недели',max_length=50)
+    time = models.TimeField(auto_now=False, auto_now_add=False)
 
-    user_id = models.ForeignKey(
-        # Поле для связи с пользователем
-        UserProfile,
-        on_delete=models.CASCADE,
-        verbose_name="Пользователь"
-    )
-    platform = models.CharField(
-        # Поле для выбора платформы
-        max_length=MAX_LENGTH,
-        choices=UserProfile.PLATFORM_CHOICES,
-        verbose_name="Платформа"
-    )
-    days_of_week = models.CharField(
-        # Поле для указания дней недели
-        max_length=MAX_LENGTH,
-        choices=DAYS_OF_WEEK_CHOICES,
-        verbose_name="Дни недели"
-    )
-    time = models.TimeField(
-        # Поле для указания времени
-        verbose_name="Время"
-    )
-    diff_to_msk = models.IntegerField(
-        # Поле для указания разницы во времени относительно МСК
-        verbose_name="Разница с МСК"
-    )
 
     class Meta:
         verbose_name = 'Напоминания'
@@ -110,50 +80,16 @@ class Notification(models.Model):
 
 
 class Content(models.Model):
-    code_gift = models.CharField(
-        # Поле для хранения кода подарка
-        max_length=255,
-        verbose_name="Код подарка"
-    )
-    url_gift = models.URLField(
-        # Поле для хранения URL подарка
-        blank=True,
-        null=True,
-        verbose_name="URL подарка"
-    )
-    usefull_url = models.URLField(
-        # Поле для хранения полезной ссылки
-        verbose_name="Полезная ссылка"
-    )
-    track_file = models.FileField(
-        # Поле для загрузки файла для отслеживания
-        upload_to='content/',
-        verbose_name="Файл для отслеживания"
-    )
-    payment_url = models.URLField(
-        # Поле для хранения URL для оплаты
-        verbose_name="URL оплаты"
-    )
-    ios_payment = models.FileField(
-        # Поле для загрузки файла оплаты для iOS
-        upload_to='content/',
-        verbose_name="Файл оплаты для iOS"
-    )
-    help_install_file = models.FileField(
-        # Поле для загрузки файла помощи по установке
-        upload_to='content/',
-        verbose_name="Файл помощи по установке"
-    )
-    present_on_pk = models.FileField(
-        # Поле для загрузки файла для ПК
-        upload_to='content/',
-        verbose_name="Файл для ПК"
-    )
-    date_created = models.DateTimeField(
-        # Поле для хранения даты и времени создания контента
-        default=timezone.now,
-        verbose_name="Дата создания"
-    )
+    code_gift = models.CharField('Код gift',max_length=50)
+    url_gift = models.URLField('Url gift', null=True, blank=True)
+    usefull_url = models.URLField('usefull_url',max_length=50)
+    track_file = models.URLField('Файл', null=True, blank=True)
+    payment_url  = models.URLField('payment_url', null=True, blank=True)
+    ios_payment  = models.URLField('ios_payment ', null=True, blank=True)
+    help_install_file  = models.URLField('help_install_file ', null=True, blank=True)
+    present_on_pc  = models.URLField('present_on_pc ', null=True, blank=True)
+    date = models.DateField('Дата', default=datetime.now)
+
 
     class Meta:
         verbose_name = 'Content'
