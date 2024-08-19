@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from bot.models import Content, Notification, UserProfile
@@ -15,9 +14,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def validate_user_id(self, value):
         """Проверка уникальности user_id."""
-        # if self.context['request'].stream.method != 'PUT':
         if UserProfile.objects.filter(user_id=value).exists():
-            raise serializers.ValidationError("Этот user_id уже существует.")
+            raise serializers.ValidationError(RECORD_EXISTS)
         return value
 
 
@@ -67,7 +65,10 @@ class NotificationCreateByUIDSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_profile = validated_data.pop('user')
-        notification = Notification.objects.create(user_id=user_profile, **validated_data)
+        notification = Notification.objects.create(
+            user_id=user_profile,
+            **validated_data
+        )
         return notification
 
     def to_representation(self, value):

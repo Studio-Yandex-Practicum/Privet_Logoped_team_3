@@ -1,51 +1,27 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
-from .models import UserProfile, Notification, Content
 
-admin.site.unregister(User)
+from bot.models import Content, Notification, UserProfile
 
 
-class UserProfileAdmin(UserAdmin):
-    model = UserProfile
-    list_display = (
-        'username',
-        'email',
-        'role',
-        'platform',
-        'is_active',
-        'is_staff'
-    )
-    search_fields = ('username', 'email', 'user_id')
-    list_filter = ('role', 'platform')
+@admin.register(UserProfile)
+class UserProfile(admin.ModelAdmin):
+    list_display = ('id', 'user_id', 'username', 'platform', 'role')
+    list_filter = ('user_id',)
+    search_fields = ('user_id',)
+    ordering = ('user_id',)
 
 
 @admin.register(Notification)
-class NotificationAdmin(admin.ModelAdmin):
-    list_display = (
-        'user',
-        'platform',
-        'days_of_week',
-        'time',
-        'diff_to_msk'
-    )
-    search_fields = ('user_username', 'days_of_week')
-    list_filter = ('platform', 'days_of_week')
+class UserProfile(admin.ModelAdmin):
+    list_display = ('id', 'user_id','platform', 'days_of_week', 'time')
+    list_filter = ('user_id',)
+    search_fields = ('user_id',)
+    ordering = ('user_id',)
 
 
 @admin.register(Content)
-class ContentAdmin(admin.ModelAdmin):
-    list_display = (
-        'code_gift',
-        'usefull_url',
-        'payment_url',
-        'date_created'
-    )
-    search_fields = (
-        'code_gift',
-        'usefull_url',
-        'payment_url'
-    )
-
-
-admin.site.register(UserProfile, UserProfileAdmin)
+class Content(admin.ModelAdmin):
+    list_display = ('code_gift','url_gift', 'usefull_url', 'track_file',
+                    'payment_url', 'date')
+    search_fields = ('code_gift',)
+    ordering = ('-date',)
