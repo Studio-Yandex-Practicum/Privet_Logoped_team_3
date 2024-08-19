@@ -15,7 +15,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def validate_user_id(self, value):
         """Проверка уникальности user_id."""
         if UserProfile.objects.filter(user_id=value).exists():
-            raise serializers.ValidationError(RECORD_EXISTS)
+            raise serializers.ValidationError("Этот user_id уже существует.")
         return value
 
 
@@ -45,8 +45,10 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 class NotificationRetreiveSerializer(serializers.ModelSerializer):
-    uid = serializers.CharField(source='user_id.user_id',
-                                            read_only=True)
+    uid = serializers.CharField(
+        source='user_id.user_id',
+        read_only=True
+    )
 
     class Meta:
         model = Notification

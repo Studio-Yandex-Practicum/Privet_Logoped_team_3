@@ -32,7 +32,10 @@ class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
             serializer = self.get_serializer(user_profile)
             return Response(serializer.data, status=HTTPStatus.OK)
         if request.method == "PUT":
-            serializer = UserProfileUpdateSerializer(user_profile, data=request.data)
+            serializer = UserProfileUpdateSerializer(
+                user_profile,
+                data=request.data
+            )
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=HTTPStatus.OK)
@@ -88,7 +91,6 @@ class NotificationViewSet(viewsets.ModelViewSet):
         """Получение напоминания по UID."""
         user_profile = get_object_or_404(UserProfile, user_id=user_id)
         queryset = Notification.objects.filter(user_id=user_profile)
-        # serializer = self.get_serializer(data=request.data)
         serializer = self.get_serializer(queryset, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -98,7 +100,6 @@ class NotificationViewSet(viewsets.ModelViewSet):
         methods=['get'],
         detail=False,
         url_path='(vk|tg)'
-        # url_path='vk'
     )
     def notification_retreive_by_time(self, request, platform):
         """Получение напоминания по времени."""

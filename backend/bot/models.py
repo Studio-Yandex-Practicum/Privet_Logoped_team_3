@@ -29,13 +29,13 @@ class UserProfile(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user_id} {self.username} {self.platform} {self.role}'
+        return f'{self.user_id}'
 
 
 class Notification(models.Model):
     user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     platform = models.CharField('platform ', max_length=50, choices=PLATFORMS)
-    days_of_week = models.CharField('Дни недели', max_length=50)
+    days_of_week = models.CharField('Дни недели', max_length=50, blank=True)
     time = models.TimeField(auto_now=False, auto_now_add=False)
 
     class Meta:
@@ -49,8 +49,7 @@ class Notification(models.Model):
         ]
 
     def __str__(self):
-        return (f'{self.user_id} {self.platform} '
-                f'{self.days_of_week} {self.time}')
+        return f'{self.user_id} {self.platform} {self.days_of_week} {self.time}'
 
 
 class Content(models.Model):

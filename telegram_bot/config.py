@@ -9,6 +9,7 @@ load_dotenv()
 class Config:
     bot_token: str = os.getenv('BOT_TOKEN')
     host: str = os.getenv('HOST')
+    owner_tg: str = os.getenv('OWNER_TG')
 
 
 bot_env = Config()

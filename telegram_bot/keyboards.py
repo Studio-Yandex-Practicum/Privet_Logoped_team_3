@@ -3,6 +3,8 @@ from aiogram.types import ReplyKeyboardMarkup  # Клавиатура под п�
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from lexicon import lexicon
+from config import bot_env
+
 
 main_kb = ReplyKeyboardMarkup(
     keyboard=[
@@ -49,7 +51,7 @@ confirmation_contact_kb = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(
-                text=lexicon.buttons.yes, url='https://t.me/BotFather'
+                text=lexicon.buttons.yes, url=bot_env.owner_tg
             ),
             InlineKeyboardButton(
                 text=lexicon.buttons.no, callback_data='main_menu'
@@ -64,6 +66,39 @@ back_to_main_menu_kb = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(
                 text=lexicon.buttons.back, callback_data='main_menu'
+            )
+        ]
+    ]
+)
+
+
+help_menu_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.install_help, callback_data='install_help'
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.output_pc, callback_data='present_on_pc'
+            )
+        ]
+    ]
+)
+
+payment_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.pay_full_version,
+                callback_data='pay_full_version',
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.pay_ios_version,
+                callback_data='pay_ios_version',
             )
         ]
     ]
