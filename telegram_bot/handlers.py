@@ -16,6 +16,7 @@ router = Router()
 
 @router.message(F.text == lexicon.buttons.logoped)
 async def role_logoped(message: Message):
+    """Выбор роли логопеда"""
     data = {
         'username': message.from_user.username,
         'user_id': message.from_user.id,
@@ -35,6 +36,7 @@ async def role_logoped(message: Message):
 
 @router.message(F.text == lexicon.buttons.parent)
 async def role_parent(message: Message):
+    """Выбор роли родителя"""
     data = {
         'username': message.from_user.username,
         'user_id': message.from_user.id,
@@ -54,12 +56,36 @@ async def role_parent(message: Message):
 
 @router.message(F.text == lexicon.buttons.usefull_video)
 async def take_usefull_video(message: Message):
-    await message.answer('Тут будет ссылка на полезное видео')
+    """Полезное видео"""
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f'{bot_env.host}/api/v1/content/'
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                if data[0].get('usefull_url'):
+                    await message.answer(data[0].get('usefull_url'))
+                else:
+                    await message.answer('Ссылка еще готовится :(')
+            else:
+                await message.answer('Ссылка еще готовится :(')
 
 
 @router.message(F.text == lexicon.buttons.track_results)
 async def take_track_results(message: Message):
-    await message.answer('Тут будет файл бланка')
+    """Отследить результат"""
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f'{bot_env.host}/api/v1/content/'
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                if data[0].get('track_file'):
+                    await message.answer(data[0].get('track_file'))
+                else:
+                    await message.answer('Ссылка еще готовится :(')
+            else:
+                await message.answer('Ссылка еще готовится :(')
 
 
 @router.message(F.text == lexicon.buttons.payment)
