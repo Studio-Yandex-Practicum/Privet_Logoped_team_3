@@ -50,7 +50,7 @@ class Roles:
         user_id = str(user_id)
         response = await Roles._get_id(user_id)
         print(response)
-        if response['status'] == HTTPStatus.NOT_FOUND:
+        if not response or response['status'] == HTTPStatus.NOT_FOUND:
             log.info('Not found user, create new')
             await Roles._post_id_with_role(user_id, role, username)
 
