@@ -1,25 +1,46 @@
-from datetime import datetime
-
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
-from users.models import User
+MAX_LENGTH = 50
 
-PLATFORMS = [
-    ('vk', 'Vk'),
-    ('tg', 'Telegram'),
-]
+# Переименовал user в user_id
+# Новое поле diff_to_msk
+# present_on_pk теперь в нижнем регистре
 
 
-class UserProfile(models.Model):
-    USER_ROLES = [
-        ('parent', 'Родитель'),
-        ('speech_therapist', 'Логопед'),
-    ]
-
-    user_id = models.CharField('user_id',max_length=50, unique=True)
-    username = models.CharField('username ',max_length=50)
-    platform = models.CharField('platform ',max_length=50, choices=PLATFORMS)
-    role = models.CharField('role ',max_length=50, choices=USER_ROLES)
+class UserProfile(AbstractUser):
+    PLATFORM_CHOICES = (
+        ('telegram', 'Telegram'),  # Определяем выбор платформы: Telegram
+        ('vk', 'VK'),  # Определяем выбор платформы: VK
+    )
+    ROLE_CHOICES = (
+        ('parent', 'Родитель'),  # Определяем выбор роли: Родитель
+        ('logoped', 'Логопед'),  # Определяем выбор роли: Логопед
+    )
+    user_id = models.CharField(
+        # Поле для хранения уникального ID пользователя
+        max_length=MAX_LENGTH,
+        unique=True,
+        verbose_name="ID пользователя")
+    platform = models.CharField(
+        # Поле для выбора платформы (Telegram или VK)
+        max_length=MAX_LENGTH,
+        choices=PLATFORM_CHOICES,
+        verbose_name="Платформа")
+    role = models.CharField(
+        # Поле для выбора роли (Родитель или Логопед)
+        max_length=MAX_LENGTH,
+        choices=ROLE_CHOICES,
+        default='parent',
+        verbose_name="Роль")
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='customuser_set',
+        blank=True,
+        help_text='Специфические права доступа для этого пользователя.',
+        verbose_name='Разрешения'
+    )
 
     class Meta:
         verbose_name = 'UserProfile'
@@ -28,7 +49,6 @@ class UserProfile(models.Model):
         indexes = [
             models.Index(fields=['user_id']),
         ]
-
 
     def __str__(self):
         return f'{self.user_id} {self.username} {self.platform} {self.role}'
@@ -41,6 +61,7 @@ class Notification(models.Model):
     days_of_week = models.CharField('Дни недели',max_length=50)
     time = models.TimeField(auto_now=False, auto_now_add=False)
 
+
     class Meta:
         verbose_name = 'Напоминания'
         verbose_name_plural = 'Напоминание'
@@ -52,7 +73,10 @@ class Notification(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user_id} {self.platform} {self.days_of_week} {self.time}'
+        return (
+            f'{self.user_id} {self.platform}'
+            f'{self.days_of_week} {self.time}'
+        )
 
 
 class Content(models.Model):
@@ -66,6 +90,7 @@ class Content(models.Model):
     present_on_pc  = models.URLField('present_on_pc ', null=True, blank=True)
     date = models.DateField('Дата', default=datetime.now)
 
+
     class Meta:
         verbose_name = 'Content'
         verbose_name_plural = 'Content'
@@ -73,7 +98,6 @@ class Content(models.Model):
         indexes = [
             models.Index(fields=['code_gift']),
         ]
-
 
     def __str__(self):
         return f'{self.code_gift}'

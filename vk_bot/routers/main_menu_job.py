@@ -4,7 +4,13 @@ from http import HTTPStatus
 
 from api.schemas import ContentOne
 from api.utils import async_http_get
+
+import bot_cfg
 from config import bot_env
+from routers.keyboard import HELP_MENU, MAIN_MENU, make_keyboard_menu, \
+    PAYMENT_MENU
+from routers.states import States, TimeStates
+
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +55,4 @@ class MainMenu:
         if response['status'] == HTTPStatus.OK:
             contents = json.loads(response['text'])
             content = ContentOne.parse_obj(contents[0])
-            # content = ContentMany.parse_raw(response['text'])
-            # content = [ContentMany(**item) for item in json.loads(response['text'])]
         return content
