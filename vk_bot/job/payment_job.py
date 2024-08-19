@@ -23,7 +23,7 @@ class PaymentMenu:
             log.error("Content not found for help_with_install")
             return {'text': ERROR_MESSAGE}
         return {
-            'text': content
+            'text': content.payment_url
         }
 
     @staticmethod
@@ -33,5 +33,5 @@ class PaymentMenu:
             log.error("Content not found for pay_ios_version")
             return {'text': ERROR_MESSAGE}
         return {
-            'text': content
+            'text': content.ios_payment
         }

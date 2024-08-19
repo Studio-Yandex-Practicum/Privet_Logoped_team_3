@@ -2,6 +2,7 @@ import logging
 
 import bot_cfg
 from api.api_notification import NotificationApi
+from constants import EVENT_MESSAGE
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ async def periodicaly_notification_job():
 
     # for alert in contents.notifications:
     #     print(f'{alert.time} {alert.user_id}')
-    peer_ids = [alert.user_id for alert in contents.notifications]
+    peer_ids = [alert.uid for alert in contents.notifications]
     # print(peer_ids)
     if not peer_ids:
         return None
@@ -32,5 +33,5 @@ async def periodicaly_notification_job():
         # peer_ids=[792239065],
         peer_ids=peer_ids,
         random_id=0,
-        message='Event Message'
+        message=EVENT_MESSAGE
     )

@@ -11,12 +11,14 @@ class ContentApi:
     @staticmethod
     async def get_pay_ios_version():
         """Купить версию для ios."""
-        return 'pay_for_ios в процессе реализации'
+        return await ContentApi._get_content()
+        # return 'pay_for_ios в процессе реализации'
 
     @staticmethod
     async def get_pay_full_version():
         """Купить полную версию."""
-        return 'pay_full_version в процессе реализации'
+        return await ContentApi._get_content()
+        # return 'pay_full_version в процессе реализации'
 
     @staticmethod
     async def get_result():

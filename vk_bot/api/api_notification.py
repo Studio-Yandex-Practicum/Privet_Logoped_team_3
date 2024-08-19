@@ -13,7 +13,6 @@ class NotificationApi:
     async def get_notification_by_time(time):
         """Загрузить периодические уведомления для указанного времени."""
         # print(time)
-        time = '11:40'
         response = await async_http_get(
             bot_env.url_api + f'{NOTIFICATION_PATH}{time}'
         )
@@ -22,6 +21,7 @@ class NotificationApi:
             notifications = Notifications(
                 notifications=[Notification(**item) for item in response_json]
             )
+            print(notifications)
         else:
             notifications = None
         return notifications

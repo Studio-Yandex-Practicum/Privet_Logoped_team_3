@@ -24,7 +24,7 @@ class HelpMenu:
         if not content:
             log.error("Content not found for help_with_install")
             return {'text': ERROR_MESSAGE}
-        return {'text': content}
+        return {'text': content.help_install_file}
 
     @staticmethod
     async def help_with_pc():
@@ -32,4 +32,4 @@ class HelpMenu:
         if not content:
             log.error("Content not found for help_with_pc")
             return {'text': ERROR_MESSAGE}
-        return {'text': content.usefull_url}
+        return {'text': content.present_on_pc}

@@ -15,3 +15,5 @@ GREETING_MESSAGE = ('Добро пожаловать в бота “Привет
 ROLE_MESSAGE = ('Укажите вашу роль:')
 INVITE_MESSAGE = f'Комманды бота {START_MENU_CMD} {MAIN_MENU_CMD}'
 ERROR_MESSAGE = 'Данные не загружены, попробуйте позже'
+
+EVENT_MESSAGE = 'Будильник! Будильник! Будильник! '

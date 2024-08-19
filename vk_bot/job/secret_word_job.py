@@ -10,7 +10,6 @@ class SecretWord:
 
     @staticmethod
     async def check(word):
-        # content = await SecretWord._get_secret_word()
         content = await ContentApi.check_secret_word_ad_return_gift()
         if not content:
             return {'text': ERROR_MESSAGE}
