@@ -50,3 +50,7 @@ class ContentAdmin(admin.ModelAdmin):
     )
     search_fields = ('code_gift',)
     ordering = ('-date',)
+
+    def has_add_permission(self, request):
+        # Отключаем возможность добавления новых пользователей
+        return False
