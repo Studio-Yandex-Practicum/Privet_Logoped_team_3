@@ -164,7 +164,6 @@ async def take_promocode(message: Message, state: FSMContext):
             if response.status == 200:
                 data = await response.json()
                 data = data[0]
-                print(data)
                 if message.text == data.get('code_gift'):
                     await message.answer(data.get('url_gift'))
                 else:
