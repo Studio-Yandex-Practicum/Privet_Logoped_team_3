@@ -35,8 +35,9 @@ class UserProfile(models.Model):
 
 
 class Notification(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    platform  = models.CharField('platform ',max_length=50, choices=PLATFORMS)
+    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    platform = models.CharField('platform ',max_length=50, choices=PLATFORMS)
     days_of_week = models.CharField('Дни недели',max_length=50)
     time = models.TimeField(auto_now=False, auto_now_add=False)
 
@@ -57,12 +58,12 @@ class Notification(models.Model):
 class Content(models.Model):
     code_gift = models.CharField('Код gift',max_length=50)
     url_gift = models.URLField('Url gift', null=True, blank=True)
-    usefull_url = models.CharField('usefull_url',max_length=50)
-    track_file = models.BinaryField('Файл')
+    usefull_url = models.URLField('usefull_url',max_length=50)
+    track_file = models.URLField('Файл', null=True, blank=True)
     payment_url  = models.URLField('payment_url', null=True, blank=True)
-    ios_payment  = models.BinaryField('ios_payment ')
-    help_install_file  = models.BinaryField('help_install_file ')
-    present_on_PK  = models.BinaryField('present_on_PK ')
+    ios_payment  = models.URLField('ios_payment ', null=True, blank=True)
+    help_install_file  = models.URLField('help_install_file ', null=True, blank=True)
+    present_on_pc  = models.URLField('present_on_pc ', null=True, blank=True)
     date = models.DateField('Дата', default=datetime.now)
 
     class Meta:

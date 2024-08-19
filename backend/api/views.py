@@ -64,6 +64,19 @@ class ContentViewSet(viewsets.ModelViewSet):
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
 
+    @action(
+        methods=['get'],
+        detail=False,
+        url_path='one'
+    )
+    def get_one(self, request):
+        """Чтение и обновление профиля UID."""
+        # user_profile = self.get_user_profile(user_id)
+        content = Content.objects.last()
+        if self.request.method == "GET":
+            serializer = self.get_serializer(content)
+            return Response(serializer.data, status=HTTPStatus.OK)
+
 
 class NotificationViewSet(viewsets.ModelViewSet):
     """(GET, LIST): Работа с профилем."""
@@ -85,7 +98,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
         url_path='uid/(?P<user_id>[^/.]+)'
     )
     def notification_retreive(self, request, user_id):
-        """Создание напоминания по UID."""
+        """Получение напоминания по UID."""
         user_profile = get_object_or_404(UserProfile, user_id=user_id)
         queryset = Notification.objects.filter(user_id=user_profile)
         # serializer = self.get_serializer(data=request.data)
@@ -101,7 +114,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
         # url_path='vk'
     )
     def notification_retreive_by_time(self, request, platform):
-        """Создание напоминания по UID."""
+        """Получение напоминания по времени."""
         print(platform)
         if 'time' not in request.query_params:
             return Response(
@@ -117,6 +130,11 @@ class NotificationViewSet(viewsets.ModelViewSet):
                 status=HTTPStatus.BAD_REQUEST
             )
 
-        queryset = Notification.objects.filter(time=time, platform=platform)
+        queryset = Notification.objects.filter(
+            time=time,
+            platform=platform
+        ).select_related('user_id')
+        for i in queryset:
+            print(i)
         serializer = NotificationRetreiveSerializer(queryset, many=True)
         return Response(serializer.data, status=HTTPStatus.OK)
