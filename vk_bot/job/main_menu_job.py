@@ -3,8 +3,9 @@ import logging
 import bot_cfg
 from api.api_content import ContentApi
 from constants import ERROR_MESSAGE
-from routers.keyboard import HELP_MENU, MAIN_MENU, make_keyboard_menu, \
-    PAYMENT_MENU
+from routers.keyboard import (
+    HELP_MENU, MAIN_MENU, make_keyboard_menu, PAYMENT_MENU
+)
 from routers.states import States, TimeStates
 
 log = logging.getLogger(__name__)
@@ -37,7 +38,6 @@ class MainMenu:
 
     @staticmethod
     async def get_video():
-        # content = await MainMenu._get_content()
         content = await ContentApi.get_video()
         if not content:
             log.error("Content not found for get_video")
@@ -61,7 +61,6 @@ class MainMenu:
         )
         return {
             'text': GET_NOTIFICATION
-            # 'text': 'get_notification в процессе реализации'
         }
 
     @staticmethod
@@ -70,14 +69,12 @@ class MainMenu:
             message_base.peer_id,
             States.waiting_for_code
         )
-        # await message_base.set_state(States.waiting_for_code)
         return {
             'text': SECRET_WORD
         }
 
     @staticmethod
     async def get_result():
-        # content = await MainMenu._get_content()
         content = await ContentApi.get_result()
         if not content:
             log.error("Content not found for get_result")

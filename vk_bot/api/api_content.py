@@ -52,7 +52,6 @@ class ContentApi:
         """Получить запись из таблицы Content."""
         try:
             response = await async_http_get(
-                # bot_env.url_api + 'content/'
                 bot_env.url_api + f'{CONTENT_PATH}'
             )
             if response['status'] == HTTPStatus.OK:

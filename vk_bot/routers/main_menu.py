@@ -8,13 +8,13 @@ from api.api import Roles
 from constants import (COMMAND_PREFIXES, GREETING_MESSAGE, ROLE_MESSAGE,
                        START_MENU_CMD, MAIN_MENU_CMD, INVITE_MESSAGE)
 from job.help_menu_job import HelpMenu
+from job.main_menu_job import MainMenu
+from job.payment_job import PaymentMenu
+from job.secret_word_job import SecretWord
 from routers.keyboard import (
     HELP_MENU, MAIN_MENU, MAIN_MENU_COMMAND, make_keyboard_menu,
     PAYMENT_MENU, ROLE_MENU,
 )
-from job.main_menu_job import MainMenu
-from job.payment_job import PaymentMenu
-from job.secret_word_job import SecretWord
 from routers.states import States, TimeStates
 from routers.time_notification import TimeNotification
 
@@ -76,7 +76,6 @@ async def sub_role_menu(message: Message):
     """Установка роли для id Родитель/Логопед"""
     log.info('Main menu command: %s', message.text)
     print(message.from_id)
-    # if message.text not in ('Уведомления', 'Подарок',):
     response_message = await MainMenu.response(message.text, message)
     await message.answer(
         response_message['text'],
@@ -115,7 +114,6 @@ async def show_main_menu(message: Message):
 async def secret_word_handler(message: Message):
     """Обработка проверки секретного слова."""
     log.info('Check gift keyword: %s', message.text)
-    # await message.reset_state()
     await bot_cfg.bot.state_dispenser.delete(message.peer_id)
     response = await SecretWord.check(message.text)
     await message.answer(
@@ -141,7 +139,6 @@ async def show_payment_menu(message: Message):
     response_message = await PaymentMenu.response(message.text)
     await message.answer(
         response_message['text'],
-        # keyboard=response_message.get('keyboard')
     )
 
 
@@ -149,5 +146,4 @@ async def show_payment_menu(message: Message):
 async def wrapper(message: Message):
     await message.answer(
         INVITE_MESSAGE,
-        # keyboard=response_message.get('keyboard')
     )

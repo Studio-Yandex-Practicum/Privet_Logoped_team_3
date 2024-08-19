@@ -43,8 +43,7 @@ def make_keyboard_menu(menu_items):
     )
 
 
-def make_keyboard(keyboard_buttons, buttons_per_line=1, inline=False):
-    # keyboard = Keyboard(inline=inline)
+def make_keyboard(keyboard_buttons, buttons_per_line=1):
     keyboard = Keyboard()
     buttons = 0
     len_buttons = len(keyboard_buttons) - 1

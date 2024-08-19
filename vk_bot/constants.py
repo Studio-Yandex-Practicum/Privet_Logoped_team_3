@@ -1,7 +1,10 @@
 DB_PATH = 'sqlite:///sqlite.db'
 
 NOTIFICATION_PATH = 'notification/vk/?time='
+PROFILE_ID_PATH = 'profile/uid/'
 CONTENT_PATH = 'content/'
+
+PLATFORM = 'vk'
 
 LOOPWRAPPER_INTERVAL = 10
 

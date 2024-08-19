@@ -1,11 +1,12 @@
 import logging
-
 from http import HTTPStatus
 
 from api.schemas import UserProfile
-from api.utils import async_http_get, async_http_patch, async_http_post, \
-    async_http_put
+from api.utils import (
+    async_http_get, async_http_post, async_http_put
+)
 from config import bot_env
+from constants import PROFILE_ID_PATH, PLATFORM
 
 log = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ class Roles:
     async def _get_id(user_id):
         try:
             response = await async_http_get(
-                bot_env.url_api + 'profile/uid/' + user_id + '/'
+                bot_env.url_api + PROFILE_ID_PATH + user_id + '/'
             )
             print(response)
             log.info('Response: %s', response)
@@ -36,7 +37,7 @@ class Roles:
     async def _post_id_with_role(user_id, role, username):
         try:
             response = await async_http_post(
-                bot_env.url_api + 'profile/uid/',
+                bot_env.url_api + PROFILE_ID_PATH,
                 data=Roles.fill_user_data(user_id, role, username)
             )
             print(response)
@@ -66,7 +67,7 @@ class Roles:
     @staticmethod
     async def _modify_user(user_id, role, username):
         response = await async_http_put(
-            bot_env.url_api + 'profile/uid/' + user_id + '/',
+            bot_env.url_api + PROFILE_ID_PATH + user_id + '/',
             data=Roles.fill_user_data(user_id, role, username)
         )
         print(response)
@@ -77,7 +78,7 @@ class Roles:
         return {
             'user_id': user_id,
             'username': username,
-            'platform': 'vk',
+            'platform': PLATFORM,
             'role': Roles.role(role)
         }
 
