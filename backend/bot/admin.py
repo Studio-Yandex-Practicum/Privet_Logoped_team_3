@@ -37,6 +37,10 @@ class NotificationAdmin(admin.ModelAdmin):
     search_fields = ('user_id', 'platform')
     ordering = ('id',)
 
+    def has_add_permission(self, request):
+        # Отключаем возможность добавления новых уведомлений через админку
+        return False
+
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):

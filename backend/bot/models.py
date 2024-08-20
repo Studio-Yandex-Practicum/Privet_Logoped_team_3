@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     ]
 
     user_id = models.CharField('ID пользователя', max_length=50, unique=True)
-    username = models.CharField('username ', max_length=50)
+    username = models.CharField('Имя пользователя', max_length=50)
     platform = models.CharField('Платформа', max_length=50, choices=PLATFORMS)
     role = models.CharField('Роль', max_length=50, choices=USER_ROLES)
 
@@ -33,16 +33,6 @@ class UserProfile(models.Model):
 
 
 class Notification(models.Model):
-    DAYS_OF_WEEK_CHOICES = [
-        ('monday', 'Понедельник'),
-        ('tuesday', 'Вторник'),
-        ('wednesday', 'Среда'),
-        ('thursday', 'Четверг'),
-        ('friday', 'Пятница'),
-        ('saturday', 'Суббота'),
-        ('sunday', 'Воскресенье'),
-    ]
-
     user_id = models.ForeignKey(
         UserProfile,
         on_delete=models.CASCADE,
@@ -52,7 +42,6 @@ class Notification(models.Model):
     days_of_week = models.CharField(
         'Дни недели',
         max_length=50,
-        choices=DAYS_OF_WEEK_CHOICES,
         blank=True
     )
     time = models.TimeField('Время', auto_now=False, auto_now_add=False)
@@ -73,10 +62,10 @@ class Notification(models.Model):
 
 class Content(models.Model):
     code_gift = models.CharField('Код подарка', max_length=50)
-    url_gift = models.URLField('URL подарка', null=True, blank=True)
+    url_gift = models.URLField('Ссылка на подарок', null=True, blank=True)
     usefull_url = models.URLField('Полезная ссылка', max_length=50)
     track_file = models.URLField('Файл для отслеживания', null=True, blank=True)
-    payment_url = models.URLField('URL оплаты', null=True, blank=True)
+    payment_url = models.URLField('Ссылка для оплаты', null=True, blank=True)
     ios_payment = models.URLField('Файл оплаты для iOS', null=True, blank=True)
     help_install_file = models.URLField(
         'Файл помощи по установке',
