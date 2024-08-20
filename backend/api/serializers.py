@@ -75,13 +75,3 @@ class NotificationCreateByUIDSerializer(serializers.ModelSerializer):
 
     def to_representation(self, value):
         return NotificationRetreiveSerializer(value).data
-
-    def validate(self, attrs):
-        if Notification.objects.filter(
-            user_id=attrs['user'],
-            platform=attrs['platform'],
-            days_of_week=attrs['days_of_week'],
-            time=attrs['time']
-        ).exists():
-            raise serializers.ValidationError(RECORD_EXISTS)
-        return attrs

@@ -79,6 +79,16 @@ class NotificationViewSet(viewsets.ModelViewSet):
         """Создание напоминания по UID."""
         serializer = NotificationCreateByUIDSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        user_profile = UserProfile.objects.filter(
+            user_id=request.data['user']
+        ).first()
+        if user_profile:
+            Notification.objects.filter(
+                user_id=user_profile,
+                platform=request.data['platform']
+            ).delete()
+
         serializer.save()
         return Response(serializer.data, status=HTTPStatus.CREATED)
 
