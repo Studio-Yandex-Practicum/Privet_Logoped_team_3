@@ -24,6 +24,10 @@ class Buttons(NamedTuple):
     no: str = 'Нет'
     # Back to main menu
     back: str = 'Назад'
+    # Notification menu
+    delete_notification: str = 'Отключить'
+    edit_notification: str = 'Изменить'
+    add_notification: str = 'Установить'
 
 
 class Placeholders(NamedTuple):
@@ -46,6 +50,7 @@ class Messages(NamedTuple):
     input_promocode: str = 'Вы можете ввести промокод:'
     # Notification
     notification: str = 'Уведомление:\nТекст уведомления'
+    input_time: str = 'Введите время уведомления в формате ЧЧ:ММ'
 
 
 class Lexicon(NamedTuple):

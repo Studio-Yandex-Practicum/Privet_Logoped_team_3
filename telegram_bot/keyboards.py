@@ -102,3 +102,41 @@ payment_kb = InlineKeyboardMarkup(
         ],
     ]
 )
+
+exist_notification_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.edit_notification,
+                callback_data='edit_notification',
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.delete_notification,
+                callback_data='delete_notification',
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.back, callback_data='main_menu'
+            )
+        ],
+    ]
+)
+
+non_exist_notification_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.add_notification,
+                callback_data='add_notification',
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=lexicon.buttons.back, callback_data='main_menu'
+            )
+        ],
+    ]
+)

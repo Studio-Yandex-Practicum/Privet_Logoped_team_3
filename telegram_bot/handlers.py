@@ -6,10 +6,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
 from aiogram.types import CallbackQuery, Message
 
+from crutches import get_notification
+
 import keyboards
 from config import bot_env
 from lexicon import lexicon
-from states import FSMGift
+from states import FSMGift, FSMInputTime
 
 router = Router()
 
@@ -132,7 +134,115 @@ async def pay_ios_version(callback: CallbackQuery):
 @router.message(F.text == lexicon.buttons.notifications)
 async def set_notifications(message: Message):
     """Настройка уведомлений"""
-    await message.answer('Как я понимаю настройки уведомлений')
+    tg_id = message.from_user.id
+    notification = await get_notification(tg_id)
+    if notification:
+        await message.answer(
+            text=f'Уведомления включены\n{notification.time}',
+            reply_markup=keyboards.exist_notification_kb,
+        )
+    else:
+        await message.answer(
+            text='Уведомления выключены',
+            reply_markup=keyboards.non_exist_notification_kb,
+        )
+
+
+@router.callback_query(F.data == 'add_notification')
+async def add_notification(callback: CallbackQuery, state: FSMContext):
+    """Добавление уведомления"""
+    await callback.answer()
+    await state.set_state(FSMInputTime.input_time)
+    await callback.message.answer(
+        text=lexicon.messages.input_time,
+        reply_markup=keyboards.back_to_main_menu_kb,
+    )
+
+
+@router.callback_query(F.data == 'delete_notification')
+async def delete_notification(callback: CallbackQuery):
+    """Удаление уведомления"""
+    await callback.answer()
+    notification = await get_notification(callback.from_user.id)
+    if notification:
+        async with aiohttp.ClientSession() as session:
+            async with session.delete(
+                f'{bot_env.host}/api/v1/notification/{notification.id}',
+            ) as response:
+                if response.status == 204:
+                    await callback.message.answer(
+                        text='Уведомление отключено',
+                    )
+    else:
+        await callback.message.answer(
+            text='Уведомления выключены',
+        )
+
+
+@router.callback_query(F.data == 'edit_notification')
+async def edit_notification(callback: CallbackQuery, state: FSMContext):
+    """Редактирование уведомления"""
+    await callback.answer()
+    await state.set_state(FSMInputTime.input_time)
+    await callback.message.answer(
+        text=lexicon.messages.input_time,
+        reply_markup=keyboards.back_to_main_menu_kb,
+    )
+
+
+@router.message(StateFilter(FSMInputTime.input_time))
+async def set_time_notification(message: Message, state: FSMContext):
+    """Установка времени уведомления"""
+    try:
+        hours, minutes = message.text.split(':')
+    except ValueError:
+        await message.answer(
+            text='Неверный формат времени :(\nПопробуйте ещё раз',
+            reply_markup=keyboards.back_to_main_menu_kb,
+        )
+    else:
+        check_hours = 0 <= int(hours) <= 23
+        check_minutes = 0 <= int(minutes) <= 59
+        if check_hours and check_minutes:
+            notification = await get_notification(message.from_user.id)
+            if notification:
+                async with aiohttp.ClientSession() as session:
+                    async with session.patch(
+                        f'{bot_env.host}/api/v1/notification/{notification.id}/',
+                        json={'time': f'{hours}:{minutes}'},
+                    ) as response:
+                        if response.status == 200:
+                            await state.set_state(default_state)
+                            await message.answer(
+                                text='Уведомление обновлено',
+                            )
+            else:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        f'{bot_env.host}/api/v1/profile/uid/{message.from_user.id}',
+                    ) as response:
+                        if response.status == 200:
+                            user = await response.json()
+                            user_id = user.get('id')
+                            async with session.post(
+                                f'{bot_env.host}/api/v1/notification/',
+                                json={
+                                    'time': f'{hours}:{minutes}',
+                                    'days_of_week': '0',
+                                    'user_id': user_id,
+                                    'platform': 'tg',
+                                },
+                            ) as response:
+                                if response.status == 201:
+                                    await state.set_state(default_state)
+                                    await message.answer(
+                                        text='Уведомление установлено',
+                                    )
+        else:
+            await message.answer(
+                text='Неверный формат времени :(\nПопробуйте ещё раз',
+                reply_markup=keyboards.back_to_main_menu_kb,
+            )
 
 
 @router.message(F.text == lexicon.buttons.gift)
@@ -156,7 +266,11 @@ async def take_promocode(message: Message, state: FSMContext):
                 if message.text == data.get('code_gift'):
                     await message.answer(data.get('url_gift'))
                 else:
-                    await message.answer('Неверный промокод :(')
+                    await message.answer(
+                        text='Неверный промокод :(\nПопробуйте ещё раз',
+                        reply_markup=keyboards.back_to_main_menu_kb,
+                    )
+                    return
             else:
                 await message.answer('Ссылка еще готовится :(')
     await state.set_state(default_state)
@@ -216,10 +330,11 @@ async def confirmation_contact(message: Message):
 
 
 @router.callback_query(F.data == 'main_menu')
-async def callback_main_menu(callback: CallbackQuery):
+async def callback_main_menu(callback: CallbackQuery, state: FSMContext):
     """Главное меню после выбора на inline-клавиатуре"""
     await callback.answer()
     await callback.message.delete()
+    await state.set_state(default_state)
     await callback.message.answer(
         text=lexicon.messages.menu,
         reply_markup=keyboards.main_kb,

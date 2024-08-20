@@ -1,6 +1,6 @@
 import aiohttp
 import asyncio
-from datetime import UTC, datetime
+from datetime import datetime
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
@@ -20,11 +20,11 @@ dp.include_router(router)
 
 async def notify_users():
     """Отправка уведомлений"""
-    utc_time = datetime.now(UTC)
-    utc_time = f'{utc_time.hour}:{utc_time.minute}'
+    time = datetime.now()
+    time = f'{time.hour}:{time.minute}'
     async with aiohttp.ClientSession() as session:
         async with session.get(
-            f'{bot_env.host}/api/v1/notification/tg/?time={utc_time}'
+            f'{bot_env.host}/api/v1/notification/tg/?time={time}'
         ) as response:
             if response.status == 200:
                 date = await response.json()
