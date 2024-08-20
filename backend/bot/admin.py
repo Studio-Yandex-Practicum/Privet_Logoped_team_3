@@ -1,9 +1,10 @@
 from django.contrib import admin
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 
 from bot.models import Content, Notification, UserProfile
 
 admin.site.unregister(Group)
+admin.site.unregister(User)
 
 
 @admin.register(UserProfile)

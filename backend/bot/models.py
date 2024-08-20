@@ -15,14 +15,14 @@ class UserProfile(models.Model):
         ('speech_therapist', 'Логопед'),
     ]
 
-    user_id = models.CharField('user_id', max_length=50, unique=True)
+    user_id = models.CharField('ID пользователя', max_length=50, unique=True)
     username = models.CharField('username ', max_length=50)
-    platform = models.CharField('platform ', max_length=50, choices=PLATFORMS)
-    role = models.CharField('role ', max_length=50, choices=USER_ROLES)
+    platform = models.CharField('Платформа', max_length=50, choices=PLATFORMS)
+    role = models.CharField('Роль', max_length=50, choices=USER_ROLES)
 
     class Meta:
-        verbose_name = 'UserProfile'
-        verbose_name_plural = 'UserProfile'
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
         ordering = ('user_id',)
         indexes = [
             models.Index(fields=['user_id']),
@@ -33,14 +33,33 @@ class UserProfile(models.Model):
 
 
 class Notification(models.Model):
-    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    platform = models.CharField('platform ', max_length=50, choices=PLATFORMS)
-    days_of_week = models.CharField('Дни недели', max_length=50, blank=True)
-    time = models.TimeField(auto_now=False, auto_now_add=False)
+    DAYS_OF_WEEK_CHOICES = [
+        ('monday', 'Понедельник'),
+        ('tuesday', 'Вторник'),
+        ('wednesday', 'Среда'),
+        ('thursday', 'Четверг'),
+        ('friday', 'Пятница'),
+        ('saturday', 'Суббота'),
+        ('sunday', 'Воскресенье'),
+    ]
+
+    user_id = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
+    platform = models.CharField('Платформа', max_length=50, choices=PLATFORMS)
+    days_of_week = models.CharField(
+        'Дни недели',
+        max_length=50,
+        choices=DAYS_OF_WEEK_CHOICES,
+        blank=True
+    )
+    time = models.TimeField('Время', auto_now=False, auto_now_add=False)
 
     class Meta:
-        verbose_name = 'Напоминания'
-        verbose_name_plural = 'Напоминание'
+        verbose_name = 'Напоминание'
+        verbose_name_plural = 'Напоминания'
         ordering = ('time',)
         indexes = [
             models.Index(fields=['user_id']),
@@ -53,23 +72,23 @@ class Notification(models.Model):
 
 
 class Content(models.Model):
-    code_gift = models.CharField('Код gift', max_length=50)
-    url_gift = models.URLField('Url gift', null=True, blank=True)
-    usefull_url = models.URLField('usefull_url', max_length=50)
-    track_file = models.URLField('Файл', null=True, blank=True)
-    payment_url = models.URLField('payment_url', null=True, blank=True)
-    ios_payment = models.URLField('ios_payment ', null=True, blank=True)
+    code_gift = models.CharField('Код подарка', max_length=50)
+    url_gift = models.URLField('URL подарка', null=True, blank=True)
+    usefull_url = models.URLField('Полезная ссылка', max_length=50)
+    track_file = models.URLField('Файл для отслеживания', null=True, blank=True)
+    payment_url = models.URLField('URL оплаты', null=True, blank=True)
+    ios_payment = models.URLField('Файл оплаты для iOS', null=True, blank=True)
     help_install_file = models.URLField(
-        'help_install_file ',
+        'Файл помощи по установке',
         null=True,
         blank=True
     )
-    present_on_pc = models.URLField('present_on_pc ', null=True, blank=True)
-    date = models.DateField('Дата', default=datetime.now)
+    present_on_pc = models.URLField('Файл для ПК', null=True, blank=True)
+    date = models.DateField('Дата создания', default=datetime.now)
 
     class Meta:
-        verbose_name = 'Content'
-        verbose_name_plural = 'Content'
+        verbose_name = 'Контент'
+        verbose_name_plural = 'Контент'
         ordering = ('-date',)
         indexes = [
             models.Index(fields=['code_gift']),
