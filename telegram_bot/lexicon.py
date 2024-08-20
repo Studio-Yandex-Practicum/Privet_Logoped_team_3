@@ -44,6 +44,11 @@ class Messages(NamedTuple):
     payment_menu: str = 'Вот чем я могу Вам помочь:'
     # Promocode menu
     input_promocode: str = 'Вы можете ввести промокод:'
+    # Notification
+    notification: str = (
+        'Уведомление:\n'
+        'Текст уведомления'
+    )
 
 
 class Lexicon(NamedTuple):
