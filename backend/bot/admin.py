@@ -30,7 +30,6 @@ class NotificationAdmin(admin.ModelAdmin):
         'id',
         'user_id',
         'platform',
-        'days_of_week',
         'time'
     )
     list_filter = ('user_id', 'platform')
@@ -52,5 +51,5 @@ class ContentAdmin(admin.ModelAdmin):
     ordering = ('-date',)
 
     def has_add_permission(self, request):
-        # Отключаем возможность добавления новых пользователей
+        # Отключаем возможность добавления нового контента
         return False
