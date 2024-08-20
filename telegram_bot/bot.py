@@ -1,16 +1,15 @@
 import aiohttp
 import asyncio
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
 
-from handlers import router
-
 import keyboards
 from config import bot_env
+from handlers import router
 from lexicon import lexicon
 
 bot = Bot(bot_env.bot_token)
@@ -33,7 +32,9 @@ async def notify_users():
                     return
                 for user in date:
                     user_uid = user.get('uid')
-                    await bot.send_message(user_uid, lexicon.messages.notification)
+                    await bot.send_message(
+                        user_uid, lexicon.messages.notification
+                    )
 
 
 async def notify_users_job():

@@ -58,9 +58,7 @@ async def role_parent(message: Message):
 async def take_usefull_video(message: Message):
     """Полезная ссылка"""
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'{bot_env.host}/api/v1/content/'
-        ) as response:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
             if response.status == 200:
                 data = await response.json()
                 data = data[0]
@@ -76,9 +74,7 @@ async def take_usefull_video(message: Message):
 async def take_track_results(message: Message):
     """Отследить результат"""
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'{bot_env.host}/api/v1/content/'
-        ) as response:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
             if response.status == 200:
                 data = await response.json()
                 data = data[0]
@@ -104,9 +100,7 @@ async def pay_full_version(callback: CallbackQuery):
     """Оплата полной версии"""
     await callback.answer()
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'{bot_env.host}/api/v1/content/'
-        ) as response:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
             if response.status == 200:
                 data = await response.json()
                 data = data[0]
@@ -123,9 +117,7 @@ async def pay_ios_version(callback: CallbackQuery):
     """Оплата iOS версии"""
     await callback.answer()
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'{bot_env.host}/api/v1/content/'
-        ) as response:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
             if response.status == 200:
                 data = await response.json()
                 data = data[0]
@@ -135,7 +127,6 @@ async def pay_ios_version(callback: CallbackQuery):
                     await callback.message.answer('Ссылка еще готовится :(')
             else:
                 await callback.message.answer('Ссылка еще готовится :(')
-
 
 
 @router.message(F.text == lexicon.buttons.notifications)
@@ -158,9 +149,7 @@ async def take_gift(message: Message, state: FSMContext):
 async def take_promocode(message: Message, state: FSMContext):
     """Выдача подарка по промокоду"""
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'{bot_env.host}/api/v1/content/'
-        ) as response:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
             if response.status == 200:
                 data = await response.json()
                 data = data[0]
@@ -177,8 +166,7 @@ async def take_promocode(message: Message, state: FSMContext):
 async def take_help(message: Message):
     """Переход в меню помощи"""
     await message.answer(
-        text=lexicon.messages.help_menu,
-        reply_markup=keyboards.help_menu_kb
+        text=lexicon.messages.help_menu, reply_markup=keyboards.help_menu_kb
     )
 
 
@@ -187,14 +175,14 @@ async def install_help(callback: CallbackQuery):
     """Меню помощи с установкой"""
     await callback.answer()
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'{bot_env.host}/api/v1/content/'
-        ) as response:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
             if response.status == 200:
                 data = await response.json()
                 data = data[0]
                 if data.get('help_install_file'):
-                    await callback.message.answer(data.get('help_install_file'))
+                    await callback.message.answer(
+                        data.get('help_install_file')
+                    )
                 else:
                     await callback.message.answer('Ссылка еще готовится :(')
             else:
@@ -206,9 +194,7 @@ async def present_on_pc(callback: CallbackQuery):
     """Меню вывода на ПК"""
     await callback.answer()
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'{bot_env.host}/api/v1/content/'
-        ) as response:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
             if response.status == 200:
                 data = await response.json()
                 data = data[0]
