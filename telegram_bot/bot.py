@@ -20,6 +20,7 @@ dp.include_router(router)
 
 
 async def notify_users():
+    """Отправка уведомлений"""
     utc_time = datetime.now(UTC)
     utc_time = f'{utc_time.hour}:{utc_time.minute}'
     async with aiohttp.ClientSession() as session:
@@ -36,6 +37,7 @@ async def notify_users():
 
 
 async def notify_users_job():
+    """Задание для переодической отправки уведомлений"""
     while True:
         await notify_users()
         await asyncio.sleep(60)
