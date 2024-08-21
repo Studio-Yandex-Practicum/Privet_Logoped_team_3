@@ -2,9 +2,8 @@ from aiogram.types import KeyboardButton  # Кнопки для Reply клави
 from aiogram.types import ReplyKeyboardMarkup  # Клавиатура под полем ввода
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from lexicon import lexicon
 from config import bot_env
-
+from lexicon import lexicon
 
 main_kb = ReplyKeyboardMarkup(
     keyboard=[
@@ -83,7 +82,7 @@ help_menu_kb = InlineKeyboardMarkup(
             InlineKeyboardButton(
                 text=lexicon.buttons.output_pc, callback_data='present_on_pc'
             )
-        ]
+        ],
     ]
 )
 
@@ -100,7 +99,7 @@ payment_kb = InlineKeyboardMarkup(
                 text=lexicon.buttons.pay_ios_version,
                 callback_data='pay_ios_version',
             )
-        ]
+        ],
     ]
 )
 

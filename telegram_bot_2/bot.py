@@ -1,15 +1,15 @@
-from datetime import datetime
-
 import aiohttp
 import asyncio
+from datetime import datetime
+
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
 
 import keyboards
-from handlers import router
 from config import bot_env
+from handlers import router
 from lexicon import lexicon
 
 bot = Bot(bot_env.bot_token)

@@ -1,12 +1,14 @@
 import aiohttp
+
 from aiogram import F, Router
 from aiogram.filters.state import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
 from aiogram.types import CallbackQuery, Message
 
-import keyboards
 from crutches import get_notification
+
+import keyboards
 from config import bot_env
 from lexicon import lexicon
 from states import FSMGift, FSMInputTime
@@ -14,61 +16,17 @@ from states import FSMGift, FSMInputTime
 router = Router()
 
 
-async def fetch_data_from_api(
-    endpoint: str,
-    message: Message = None,
-    callback: CallbackQuery = None
-):
-    """Функция для получения данных из API"""
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'{bot_env.host}/api/v1/{endpoint}'
-        ) as response:
-            if response.status == 200:
-                data = await response.json()
-                return data[0]
-            else:
-                return None
-
-
-async def message_api_response(data_key, message: Message):
-    """Обработка ответа от API и отправка сообщения пользователю"""
-    data = await fetch_data_from_api('content/')
-    if data:
-        if data.get(data_key):
-            await message.answer(data.get(data_key))
-        else:
-            await message.answer('Ссылка еще готовится :(')
-    else:
-        await message.answer('Ссылка еще готовится :(')
-
-
-async def callback_api_response(data_key, callback: CallbackQuery):
-    """Обработка ответа от API и отправка сообщения пользователю"""
-    data = await fetch_data_from_api('content/')
-    if data:
-        if data.get(data_key):
-            await callback.message.answer(data.get(data_key))
-        else:
-            await callback.message.answer('Ссылка еще готовится :(')
-    else:
-        await callback.message.answer('Ссылка еще готовится :(')
-
-
-async def handle_role_selection(
-        message: Message,
-        role: str,
-        response_text: str
-):
-    """Обработка выбора роли и отправка данных в API"""
+@router.message(F.text == lexicon.buttons.logoped)
+async def role_logoped(message: Message):
+    """Выбор роли логопеда"""
     data = {
         'username': message.from_user.username,
         'user_id': message.from_user.id,
-        'role': role,
+        'role': 'speech_therapist',
         'platform': 'tg',
     }
     await message.answer(
-        text=response_text,
+        text=lexicon.messages.role_logoped,
         reply_markup=keyboards.main_kb,
     )
     async with aiohttp.ClientSession() as session:
@@ -78,36 +36,56 @@ async def handle_role_selection(
         )
 
 
-@router.message(F.text == lexicon.buttons.logoped)
-async def role_logoped(message: Message):
-    """Выбор роли логопеда"""
-    await handle_role_selection(
-        message,
-        role='speech_therapist',
-        response_text=lexicon.messages.role_logoped
-    )
-
-
 @router.message(F.text == lexicon.buttons.parent)
 async def role_parent(message: Message):
     """Выбор роли родителя"""
-    await handle_role_selection(
-        message,
-        role='parent',
-        response_text=lexicon.messages.role_parent
+    data = {
+        'username': message.from_user.username,
+        'user_id': message.from_user.id,
+        'role': 'parent',
+        'platform': 'tg',
+    }
+    await message.answer(
+        text=lexicon.messages.role_parent,
+        reply_markup=keyboards.main_kb,
     )
+    async with aiohttp.ClientSession() as session:
+        await session.post(
+            f'{bot_env.host}/api/v1/profile/uid/',
+            json=data,
+        )
 
 
 @router.message(F.text == lexicon.buttons.usefull_video)
 async def take_usefull_video(message: Message):
     """Полезная ссылка"""
-    await message_api_response('usefull_url', message)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
+            if response.status == 200:
+                data = await response.json()
+                data = data[0]
+                if data.get('usefull_url'):
+                    await message.answer(data.get('usefull_url'))
+                else:
+                    await message.answer('Ссылка еще готовится :(')
+            else:
+                await message.answer('Ссылка еще готовится :(')
 
 
 @router.message(F.text == lexicon.buttons.track_results)
 async def take_track_results(message: Message):
     """Отследить результат"""
-    await message_api_response('track_file', message)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
+            if response.status == 200:
+                data = await response.json()
+                data = data[0]
+                if data.get('track_file'):
+                    await message.answer(data.get('track_file'))
+                else:
+                    await message.answer('Ссылка еще готовится :(')
+            else:
+                await message.answer('Ссылка еще готовится :(')
 
 
 @router.message(F.text == lexicon.buttons.payment)
@@ -123,14 +101,34 @@ async def help_with_payment(message: Message):
 async def pay_full_version(callback: CallbackQuery):
     """Оплата полной версии"""
     await callback.answer()
-    await callback_api_response('payment_url', callback)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
+            if response.status == 200:
+                data = await response.json()
+                data = data[0]
+                if data.get('payment_url'):
+                    await callback.message.answer(data.get('payment_url'))
+                else:
+                    await callback.message.answer('Ссылка еще готовится :(')
+            else:
+                await callback.message.answer('Ссылка еще готовится :(')
 
 
 @router.callback_query(F.data == 'pay_ios_version')
 async def pay_ios_version(callback: CallbackQuery):
     """Оплата iOS версии"""
     await callback.answer()
-    await callback_api_response('ios_payment', callback)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
+            if response.status == 200:
+                data = await response.json()
+                data = data[0]
+                if data.get('ios_payment'):
+                    await callback.message.answer(data.get('ios_payment'))
+                else:
+                    await callback.message.answer('Ссылка еще готовится :(')
+            else:
+                await callback.message.answer('Ссылка еще готовится :(')
 
 
 @router.message(F.text == lexicon.buttons.notifications)
@@ -260,7 +258,21 @@ async def take_gift(message: Message, state: FSMContext):
 @router.message(StateFilter(FSMGift.input_promocode))
 async def take_promocode(message: Message, state: FSMContext):
     """Выдача подарка по промокоду"""
-    await message_api_response('code_gift', message)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
+            if response.status == 200:
+                data = await response.json()
+                data = data[0]
+                if message.text == data.get('code_gift'):
+                    await message.answer(data.get('url_gift'))
+                else:
+                    await message.answer(
+                        text='Неверный промокод :(\nПопробуйте ещё раз',
+                        reply_markup=keyboards.back_to_main_menu_kb,
+                    )
+                    return
+            else:
+                await message.answer('Ссылка еще готовится :(')
     await state.set_state(default_state)
 
 
@@ -268,23 +280,44 @@ async def take_promocode(message: Message, state: FSMContext):
 async def take_help(message: Message):
     """Переход в меню помощи"""
     await message.answer(
-        text=lexicon.messages.help_menu,
-        reply_markup=keyboards.help_menu_kb
+        text=lexicon.messages.help_menu, reply_markup=keyboards.help_menu_kb
     )
 
 
 @router.callback_query(F.data == 'install_help')
 async def install_help(callback: CallbackQuery):
-    """Помощь с установкой"""
+    """Меню помощи с установкой"""
     await callback.answer()
-    await callback_api_response('help_install_file', callback)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
+            if response.status == 200:
+                data = await response.json()
+                data = data[0]
+                if data.get('help_install_file'):
+                    await callback.message.answer(
+                        data.get('help_install_file')
+                    )
+                else:
+                    await callback.message.answer('Ссылка еще готовится :(')
+            else:
+                await callback.message.answer('Ссылка еще готовится :(')
 
 
 @router.callback_query(F.data == 'present_on_pc')
 async def present_on_pc(callback: CallbackQuery):
-    """Как вывести на ПК"""
+    """Меню вывода на ПК"""
     await callback.answer()
-    await callback_api_response('present_on_pc', callback)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f'{bot_env.host}/api/v1/content/') as response:
+            if response.status == 200:
+                data = await response.json()
+                data = data[0]
+                if data.get('present_on_pc'):
+                    await callback.message.answer(data.get('present_on_pc'))
+                else:
+                    await callback.message.answer('Ссылка еще готовится :(')
+            else:
+                await callback.message.answer('Ссылка еще готовится :(')
 
 
 @router.message(F.text == lexicon.buttons.contact_logoped)
@@ -297,10 +330,11 @@ async def confirmation_contact(message: Message):
 
 
 @router.callback_query(F.data == 'main_menu')
-async def callback_main_menu(callback: CallbackQuery):
+async def callback_main_menu(callback: CallbackQuery, state: FSMContext):
     """Главное меню после выбора на inline-клавиатуре"""
     await callback.answer()
     await callback.message.delete()
+    await state.set_state(default_state)
     await callback.message.answer(
         text=lexicon.messages.menu,
         reply_markup=keyboards.main_kb,
