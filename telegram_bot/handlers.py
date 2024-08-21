@@ -260,7 +260,19 @@ async def take_gift(message: Message, state: FSMContext):
 @router.message(StateFilter(FSMGift.input_promocode))
 async def take_promocode(message: Message, state: FSMContext):
     """Выдача подарка по промокоду"""
-    await message_api_response('code_gift', message)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f'{bot_env.host}/api/v1/content/'
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                data = data[0]
+                if message.text == data.get('code_gift'):
+                    await message.answer(data.get('url_gift'))
+                else:
+                    await message.answer('Неверный промокод :(')
+            else:
+                await message.answer('Ссылка еще готовится :(')
     await state.set_state(default_state)
 
 
