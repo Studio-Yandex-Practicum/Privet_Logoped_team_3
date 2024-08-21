@@ -104,6 +104,8 @@
 - Aiogram;
 - Vkbottle;
 - Python;
+- SQLAlchemy;
+- Pydantic;
 - SQLite.
 
 ## Команда
